@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="monitorMqtt-web:war">
+    <output-path>$PROJECT_DIR$/monitorMqtt-web/target</output-path>
+    <root id="archive" name="box-web.war">
+      <element id="artifact" artifact-name="monitorMqtt-web:war exploded" />
+    </root>
+  </artifact>
+</component>

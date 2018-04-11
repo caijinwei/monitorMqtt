@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.wecon:common-util:1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/wecon/common-util/1.0-SNAPSHOT/common-util-1.0-20170805.010007-7.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/wecon/common-util/1.0-SNAPSHOT/common-util-1.0-20170805.010007-7-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/wecon/common-util/1.0-SNAPSHOT/common-util-1.0-20170805.010007-7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

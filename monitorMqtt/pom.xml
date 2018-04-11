@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.wecon.monitorMqtt</groupId>
+    <artifactId>monitorMqtt</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.jetty.aggregate</groupId>
+            <artifactId>jetty-all</artifactId>
+            <version>7.6.15.v20140411</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>9.3.5.v20151012</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <packaging>pom</packaging>
+    <modules>
+        <module>monitorMqtt-context</module>
+        <module>monitorMqtt-web</module>
+        <module>monitorMqtt-test</module>
+        <module>monitorMqtt-api</module>
+        <module>monitorMqtt-impl</module>
+        <!--<module>box-console-mqtt</module>-->
+        <!--<module>box-data-api</module>-->
+        <!--<module>box-data-impl</module>-->
+        <!--<module>box-data-web</module>-->
+    </modules>
+
+
+    <repositories>
+
+
+        <!--<repository>
+            <id>wecon_hw</id>
+            <name>wecon_hw</name>
+            <url>https://devrepo.devcloud.huaweicloud.com/01/nexus/content/repositories/909e28bf13fa428ea57082db4a714c3c_2_0/</url>
+        </repository>-->
+        <repository>
+            <id>aliyun</id>
+            <name>aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>mavenCentral</id>
+            <name>mavenCentral</name>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+    </repositories>
+
+</project>

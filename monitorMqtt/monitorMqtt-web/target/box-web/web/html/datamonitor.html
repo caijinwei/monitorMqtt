@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="weconweb">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="../css/style.css" />
+<link rel="stylesheet"
+	href="../lib/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="../lib/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="../css/page.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet"
+	href="../lib/x-editable-1.5.1/css/bootstrap-editable.css">
+<link rel="stylesheet"
+	href="../lib/bootstrap/bootstrap-switch/css/bootstrap-switch.min.css">
+</head>
+<body ng-controller="infoController" ng-init="onInit()"
+	style="margin-top: 20px; display: none;">
+	<ol class="breadcrumb" ng-if="accounttype==1">
+		<li><a href="overview.html">主页</a></li>
+		<li class="active">{{devicename}}</li>
+	</ol>
+	<ul class="nav nav-pills nav-justified" role="tablist">
+		<li ng-cloak ng-if="accounttype==1 && deviceid>0"><a
+			href="baseinfo.html?device_id={{deviceid}}&device_name={{devicename}}">基本配置</a></li>
+		<li class="active"><a
+			href="datamonitor.html?device_id={{deviceid}}&device_name={{devicename}}">实时数据</a></li>
+		<li><a
+			href="alarmlog.html?device_id={{deviceid}}&device_name={{devicename}}">报警记录</a></li>
+		<li><a
+			href="historydata.html?device_id={{deviceid}}&device_name={{devicename}}">历史数据</a></li>
+		<!-- <li ng-if="accounttype==1 && deviceid>0"><a
+			href="remotedownload.html?device_id={{deviceid}}&device_name={{devicename}}">远程下载</a></li> -->
+	</ul>
+	<div class="container-fluid" style="margin-top: 40px;">
+		<ul class="nav nav-tabs" role="tablist" id="monitorTab"
+			style="margin-top: 20px;">
+
+			<li ng-repeat="x in dir_list"
+				ng-class="{active:x.id==dir_list[0].id && type==0 }"><a
+				href="#data-item-1" data-toggle="tab" id="actgroupId"
+				ng-click="ws_send(paginationConf.currentPage,paginationConf.itemsPerPage,x.id);">{{x.name}}</a>
+			</li>
+
+
+			<li><a href="#group-setting" data-toggle="tab"> <span
+					class="glyphicon glyphicon-cog"></span> 分组设置
+			</a></li>
+		</ul>
+		<form method="post" id="myform"></form>
+		<div id="monitorContent" class="tab-content">
+			<!--数据分组-->
+			<div class="tab-pane active" id="data-item-1">
+				<!--search data id:{{search_id}}-->
+				<div class="conatiner-fluid" style="margin: 20px 20px;">
+					<table class="table table-bordered">
+						<caption>
+							<button type="button" class="btn btn-primary" data-toggle="modal"
+								ng-cloak ng-if="accounttype==1 && deviceid>0"
+								data-target="#addpoint" ng-click="addmonitor();">
+								<span class="glyphicon glyphicon-plus"></span> 添加监控点
+							</button>
+							<button type="button" class="btn btn-primary" data-toggle="modal"
+								ng-cloak
+								ng-if="(accounttype==1 && deviceid==-100)||(accounttype==2 && deviceid==-200)"
+								data-target="#dispatchpoint" ng-click="showRestList()">
+								<span class="fa fa-indent"></span> 分配监控点
+							</button>
+							<button type="button" class="btn btn-primary" data-toggle="modal"
+								ng-cloak ng-if="accounttype==1 && deviceid>0"
+								data-target="#addpoint" ng-click="batchmonitor();">
+								<span class="glyphicon glyphicon-list"
+									style="margin-left: 15px;"></span> 批量添加
+							</button>
+
+						<!-- 	 <button type="button" class="btn btn-primary" data-toggle="modal"
+								ng-click="exportExcel();">
+								<span class="glyphicon glyphicon-import"
+									style="margin-left: 15px;"></span> 数据导入
+							</button>
+
+							<button type="button" class="btn btn-primary" data-toggle="modal"
+								ng-click="exportExcel();">
+								<span class="glyphicon glyphicon-export"
+									style="margin-left: 15px;"></span> 数据导出
+							</button> -->
+						</caption>
+						<thead>
+							<tr>
+								<th class="col-md-1">状态</th>
+								<th class="col-md-1">名称</th>
+								<th class="col-md-1">数值</th>
+								<th class="col-md-2">描述</th>
+								<th class="col-md-3">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="x in actDatas">
+								<td><span ng-if="x.box_state==1" ng-switch="{{x.state}}">
+										<span ng-switch-when="0"> <span
+											ng-switch="{{x.re_state}}"><i name="act_i_state"
+												ng-switch-when="0" class="fa  fa-circle"
+												style="color: gray;" data-toggle="tooltip" title="离线"></i><i
+												name="act_i_state" ng-switch-when="1" class="fa  fa-circle"
+												style="color: green;" data-toggle="tooltip" title="在线"></i><i
+												name="act_i_state" ng-switch-when="2" class="fa  fa-circle"
+												style="color: red;" data-toggle="tooltip" title="超时"></i> <i
+												name="act_i_state" ng-switch-default class="fa  fa-circle"
+												style="color: red;" data-toggle="tooltip" title="超时"></i></span>
+
+									</span> <span ng-switch-when="1"> <i name="act_i_state"
+											class="fa  fa-circle" style="color: orange;"
+											data-toggle="tooltip" title="条目未下发"></i></span> <span
+										ng-switch-when="2"><i name="act_i_state"
+											class="fa  fa-circle" style="color: orange;"
+											data-toggle="tooltip" title="条目未下发"></i></span> <span
+										ng-switch-when="-1"><i name="act_i_state"
+											class="fa  fa-circle" style="color: black;"
+											data-toggle="tooltip" title="编译失败"></i></span> <span
+										ng-switch-when="-2"><i name="act_i_state"
+											class="fa  fa-circle" style="color: black;"
+											data-toggle="tooltip" title="地址转义失败"></i></span> <span
+										ng-switch-when="-3"><i name="act_i_state"
+											class="fa  fa-circle" style="color: black;"
+											data-toggle="tooltip" title="地址绑定失败"></i> </span> <span
+										ng-switch-default><i name="act_i_state"
+											class="fa  fa-circle" style="color: black;"
+											data-toggle="tooltip" title="未知状态"></i> </span>
+
+								</span> <span ng-if="x.box_state==0"><i name="act_i_state"
+										class="fa  fa-circle" style="color: gray;"
+										data-toggle="tooltip" title="离线"></i></span></td>
+								<td><a href="#" id="act_name_{{x.id}}"
+									ng-if="(accounttype==1&&deviceid<0)||(accounttype==2)"
+									ng-click="editable_name(x,1);">{{x.ref_alais==''?x.name:x.ref_alais}}</a><span
+									ng-if="(accounttype==1&&deviceid>0)">{{x.ref_alais==''?x.name:x.ref_alais}}</span></td>
+								<td><a href="#" id="act_value_{{x.id}}"
+									ng-click="editable_value(x,1);"
+									ng-if="(accounttype==1&&x.addr_type!=0)||(accounttype==2&&x.role_type==3&&x.addr_type!=0)">{{x.re_value}}</a><span
+									style="float: right;"
+									ng-if="(accounttype==1&&x.addr_type!=0)||(accounttype==2&&x.role_type==3&&x.addr_type!=0)">{{x.ext_unit}}</span><span
+									ng-if="accounttype==2&&x.role_type!=3&&x.addr_type!=0">{{x.re_value}}</span><span
+									style="float: right;"
+									ng-if="accounttype==2&&x.role_type!=3&&x.addr_type!=0">&nbsp;&nbsp;{{x.ext_unit}}</span>
+									<p
+										ng-if="(accounttype==1&&x.addr_type==0)||(accounttype==2&&x.role_type==3&&x.addr_type==0)"
+										class="switch" id="mySwitch_{{x.id}}">
+										<input name="switch-state" type="checkbox" data-bit="{{x}}">
+									</p>
+									<p ng-if="(accounttype==2&&x.role_type!=3&&x.addr_type==0)"
+										class="switch" id="mySwitch_{{x.id}}">
+										<input name="switch-state" type="checkbox" data-bit="{{x}}"
+											checked disabled>
+									</p></td>
+								<td>{{x.describe}}</td>
+								<td><a href="#" title="编辑" data-toggle="modal"
+									data-target="#addpoint" ng-cloak
+									ng-if="accounttype==1&& deviceid>0" ng-click="editmonitor(x);">
+										<span class="glyphicon glyphicon-edit"></span> 编辑
+								</a> <a href="#" title="复制" data-toggle="modal"
+									data-target="#copyDataGroup" ng-cloak ng-if="deviceid<0"
+									ng-click="copymonitor(x);"> <span
+										class="glyphicon glyphicon-file"></span> 复制
+								</a> <a href="#" title="移动分组" data-toggle="modal"
+									data-target="#moveDataGroup" ng-click="movemonitor(x);"> <span
+										class="glyphicon glyphicon-resize-horizontal"></span> 移动
+								</a> <a href="#" title="移除" data-toggle="modal" ng-cloak
+									ng-if="deviceid<0" data-target="#deletePoint"
+									ng-click="remonitor(x);"> <span
+										class="glyphicon glyphicon-trash"></span> 移除
+								</a> <a href="#" title="删除" data-toggle="modal"
+									data-target="#deletePoint" ng-cloak
+									ng-if="accounttype==1&& deviceid>0" ng-click="delmonitor(x);">
+										<span class="glyphicon glyphicon-trash"></span> 删除
+								</a></td>
+							</tr>
+						</tbody>
+					</table>
+					<tm-pagination conf="paginationConf"></tm-pagination>
+					<div class="modal fade" id="loadingModal" tabindex="-1"
+						role="dialog" aria-labelledby="mySmallModalLabel"
+						data-backdrop="static">
+						<div class="modal-dialog modal-sm" role="document"
+							style="margin-top: 350px; text-align: center">
+							<img src="../image/loading.jpg" />
+						</div>
+					</div>
+					<!--添加/编辑监控点-->
+					<div class="modal" id="addpoint" tabindex="-1"
+						data-backdrop="false">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">
+										<span>&times;</span>
+									</button>
+									<h4 class="modal-title">{{showtype==0?"添加监控数据":showtype==1?"编辑监控数据":"批量监控数据"}}</h4>
+								</div>
+								<div class="modal-body">
+									<div class="container-fluid">
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;">
+											<span class="col-md-3">名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</span>
+											<input id="nameid" type="text" class="col-md-9"
+												style="height: 30px; padding-left: 5px;"
+												placeholder="请输入少于50位的字符" maxlength="50" />
+										</div>
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;">
+											<span class="col-md-3">连接设备</span> <select class="col-md-9"
+												id="conid" style="height: 30px;">
+												<option ng-repeat="x in infoDatas" value="{{x.plcId}}">{{$index+1}}-{{x.port}}</option>
+											</select>
+										</div>
+
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;">
+											<span class="col-md-3">地址类型</span> <select class="col-md-3"
+												id="addrtypeid" style="height: 30px;">
+												<option ng-repeat="x in allAddrs" value="{{x.addrkey}}">{{x.addrkey==0?"位地址":x.addrkey==1?"字节地址":x.addrkey==2?"字地址":"双字"}}</option>
+
+											</select> <span class="col-md-3">寄存器类型</span> <select id="registerid"
+												class="col-md-3" style="height: 30px;">
+												<option ng-repeat="x in addrvalues" value="{{x.addrvalue}}">{{x.addrvalue}}</option>
+
+											</select>
+										</div>
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;" id="registeraddr">
+											<span class="col-md-3">寄存器地址(主编号)</span><input id="addrid"
+												type="text" class="col-md-3"
+												style="height: 30px; padding-left: 5px;" /> <span
+												class="col-md-6" style="font-weight: bold;">主编号:<span
+												id="rangid"></span><span>(</span><span id="scaleid"></span><span>)</span></span>
+
+										</div>
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;" id="child_registeraddr">
+											<span class="col-md-3">寄存器地址(子编号)</span><input
+												id="child_addrid" type="text" class="col-md-3"
+												style="height: 30px; padding-left: 5px;" /> <span
+												class="col-md-6" style="font-weight: bold;">子编号:<span
+												id="child_rangid"></span><span>(</span><span
+												id="child_scaleid"></span><span>)</span></span>
+
+										</div>
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;" id="div_unit">
+											<span class="col-md-3">单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位</span>
+											<input id="unitid" type="text" class="col-md-9"
+												style="height: 30px; padding-left: 5px;"
+												placeholder="请输入少于20位的字符" maxlength="20" />
+										</div>
+
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;" id="divdatatypeid">
+											<span class="col-md-3">数据格式</span> <select id="datatypeid"
+												class="col-md-9" style="height: 30px;">
+												<option ng-repeat="x in dataTypes" value="{{x.value}}"
+													ng-if="x.value!=400&&x.value!=401&&x.value!=402&&x.value!=403&&x.value!=404&&x.value!=405">{{x.text}}</option>
+											</select>
+										</div>
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;" id="datadigitid">
+											<span class="col-md-3">整数位数</span> <input type="text"
+												class="col-md-3" style="height: 30px;" id="dataid" /> <span
+												class="col-md-3">小数位数</span><input type="text"
+												class="col-md-3" style="height: 30px;" id="decid" />
+										</div>
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;" id="div_stringid">
+											<span class="col-md-3">操作字符</span><input id="stringid"
+												type="text" class="col-md-3"
+												style="height: 30px; padding-left: 5px;" /><span>&nbsp;&nbsp;个&nbsp;(1~256)</span>
+
+										</div>
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;" id="divbatchid">
+											<span class="col-md-3">批量个数</span> <input type="number"
+												min="1" max="40" class="col-md-3"
+												style="height: 30px; padding-left: 5px;" value="1"
+												id="batchid" /> <span class="col-md-3">增量</span> <input
+												type="number" class="col-md-3"
+												style="height: 30px; padding-left: 5px;" value="1"
+												id="increaseid" />
+										</div>
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;">
+											<span class="col-md-3">描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;述</span>
+											<input type="text" id="describeid" class="col-md-9"
+												style="height: 30px; padding-left: 5px;"
+												placeholder="请输入少于50位的字符" maxlength="50" />
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-info"
+										ng-click="saveupmonitor()">确定</button>
+									<button type="button" class="btn btn-default"
+										data-dismiss="modal">取消</button>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="modal fade" id="loadingModalid" tabindex="-1"
+						role="dialog" aria-labelledby="mySmallModalLabel"
+						data-backdrop="static">
+						<div class="modal-dialog modal-sm" role="document"
+							style="margin-top: 350px; text-align: center">
+							<img src="../image/loading.jpg" />
+						</div>
+					</div>
+					<!--设置地址-->
+					<div class="modal" id="addrsetting" tabindex="1"
+						data-backdrop="false">
+						<div class="modal-dialog modal-sm">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">
+										<span>&times;</span>
+									</button>
+									<h4 class="modal-title">设置地址</h4>
+								</div>
+								<div class="modal-body">
+									<div class="container-fluid">
+										<div style="margin: 10px 0;">
+											<div class="row">
+												<span class="col-md-5">寄存器类型</span> <select class="col-md-7"
+													style="height: 30px;">
+													<option value="x">X</option>
+													<option value="y">Y</option>
+													<option value="m">M</option>
+													<option value="t">T</option>
+													<option value="c">C</option>
+													<option value="d">D</option>
+													<option value="s">S</option>
+													<option value="sd">SD</option>
+													<option value="ch">CH</option>
+												</select>
+											</div>
+											<div class="row" style="margin-top: 20px;">
+												<span class="col-md-5">寄存器地址</span> <input type="text"
+													class="col-md-7" style="height: 30px; padding-left: 5px;"
+													placeholder="十进制数或十六进制数" />
+											</div>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-info">确定</button>
+										<button type="button" class="btn btn-default"
+											data-dismiss="modal">取消</button>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<!--复制监控点-->
+					<div class="modal" id="copyDataGroup" tabindex="-1"
+						data-backdrop="false">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">
+										<span>&times;</span>
+									</button>
+									<h4 class="modal-title">监控点复制</h4>
+								</div>
+								<div class="modal-body">
+									<div class="container-fluid">
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;">
+											<span class="col-md-3">当前分组</span> <span class="col-md-9"
+												id="nowgroupid"></span>
+										</div>
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;">
+											<span class="col-md-3">复制到</span> <select class="col-md-9"
+												style="height: 30px;" id="copymonitorid">
+												<option ng-repeat="x in dir_list" value={{x.id}}>{{x.name}}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-info"
+										ng-click="copy_monitor_group()">确定</button>
+									<button type="button" class="btn btn-default"
+										data-dismiss="modal">取消</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--删除监控点-->
+					<div class="modal" tabindex="-1" id="deletePoint"
+						data-backdrop="false">
+						<div class="modal-dialog modal-sm">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">
+										<span>&times;</span>
+									</button>
+									<h4 class="modal-title">{{isdelmonitor==1?"移除监控点":"删除监控点"}}</h4>
+								</div>
+								<div class="modal-body">
+									<span id="delgroupid"></span>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-info"
+										ng-click="del_monitor_group()">确定</button>
+									<button type="button" class="btn btn-default"
+										data-dismiss="modal">取消</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--移动监控点-->
+					<div class="modal" id="moveDataGroup" tabindex="-1"
+						data-backdrop="false">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">
+										<span>&times;</span>
+									</button>
+									<h4 class="modal-title">监控点移动</h4>
+								</div>
+								<div class="modal-body">
+									<div class="container-fluid">
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;">
+											<span class="col-md-3">当前分组</span> <span class="col-md-9"
+												id="movenowgroupid">></span>
+										</div>
+										<div class="row col-md-11 col-md-offset-1"
+											style="margin: 10px 0;">
+											<span class="col-md-3">移动到</span> <select id="movemonitorid"
+												class="col-md-9" style="height: 30px;" id="movemonitorid">
+												<option ng-repeat="x in dir_list" value={{x.id}}>{{x.name}}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-info"
+										ng-click="move_monitor_group()">确定</button>
+									<button type="button" class="btn btn-default"
+										data-dismiss="modal">取消</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--分配监控点-->
+					<div class="modal" id="dispatchpoint" tabindex="-1"
+						data-backdrop="false">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">
+										<span>&times;</span>
+									</button>
+									<h4 class="modal-title">分配监控点</h4>
+								</div>
+								<div class="modal-body " style="height: 450px;"
+									id="model-body-id">
+									<iframe id="myiframe" frameborder="0" marginheight="0"
+										marginwidth="0" width="100%" height="100%"></iframe>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-info"
+										ng-click="setViewOpint()">确定</button>
+									<button type="button" class="btn btn-default"
+										data-dismiss="modal">取消</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--分组设置-->
+			<div class="tab-pane" id="group-setting">
+				<div class="container-fluid" style="margin: 20px 20px;">
+					<table class="table table-bordered table-striped">
+						<caption>
+							<button type="button" class="btn btn-primary" data-toggle="modal"
+								data-target="#addDataGroup">
+								<span class="glyphicon glyphicon-plus"></span> 创建分组
+							</button>
+						</caption>
+						<thead>
+							<tr>
+								<th>分组名称</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="x in dir_list">
+								<td>{{x.name}}</td>
+								<td><a href="#"> <span class="glyphicon glyphicon-edit"
+										data-toggle="modal" ng-click="editGroup(x)"
+										style="color: #2889d0; margin: 10px;"></span>
+								</a> <a href="#"> <span class="glyphicon glyphicon-trash"
+										data-toggle="modal" ng-click="delGroup(x)"
+										style="color: #2889d0; margin: 10px;"></span>
+								</a></td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				<!--创建分组-->
+				<div class="modal" tabindex="-1" id="addDataGroup"
+					data-backdrop="false">
+					<div class="modal-dialog modal-sm">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									ng-click="showAddGroup()">
+									<span>&times;</span>
+								</button>
+								<h4 class="modal-title">创建分组</h4>
+							</div>
+							<div class="modal-body">
+								<div class="container-fluid">
+									<div class="form-group">
+										<input id="newGroupName" type="text" class="form-control"
+											placeholder="请输入少于15位字符的名称" style="padding-left: 5px;"
+											maxlength="15">
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-info" data-dismiss="modal"
+									ng-click="add_group();">确定</button>
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">取消</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--删除分组-->
+				<div class="modal" tabindex="-1" id="deleteGroup"
+					data-backdrop="false">
+					<div class="modal-dialog modal-sm">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">
+									<span>&times;</span>
+								</button>
+								<h4 class="modal-title">删除分组</h4>
+							</div>
+							<div class="modal-body">
+								<span id="delid"></span>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-info"
+									ng-click="del_group();">确定</button>
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">取消</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--编辑分组-->
+				<div class="modal" tabindex="-1" id="editGroupName"
+					data-backdrop="false">
+					<div class="modal-dialog modal-sm">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">
+									<span>&times;</span>
+								</button>
+								<h4 class="modal-title">编辑分组</h4>
+							</div>
+							<div class="modal-body">
+								<div class="container-fluid">
+									<div class="form-group">
+										<input type="text" class="form-control" id="editid"
+											style="padding-left: 5px;" placeholder="请输入少于15位字符的名称"
+											onfocus="this.select()" autofocus="autofocus" maxlength="15">
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-info"
+									ng-click="edit_group();">确定</button>
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">取消</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="../lib/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
+	<script src="../lib/bootstrap/3.3.7/js/bootstrap.min.js"
+		type="text/javascript"></script>
+	<script src="../lib/angular/angular.min.js" type="text/javascript"></script>
+	<script src="../lib/x-editable-1.5.1/js/bootstrap-editable.min.js"></script>
+	<script src="../lib/wecon-common.js" type="text/javascript"></script>
+	<script src="../js/datamonitor.js?v=1" type="text/javascript"></script>
+	<script src="../lib/pagination.js" type="text/javascript"></script>
+	<script src="../lib/bootstrap/bootstrap-switch/js/highlight.js"></script>
+	<script
+		src="../lib/bootstrap/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+	<script language="JavaScript">
+		$(function() {
+			function initTableCheckbox() {
+				var $thr = $('#allpointlist thead tr');
+				var $checkAllTh = $('<th><input type="checkbox" id="checkAll" name="checkAll" style="width: 18px;height: 18px;" /></th>');
+				/*将全选/反选复选框添加到表头最前，即增加一列*/
+				$thr.prepend($checkAllTh);
+				/*“全选/反选”复选框*/
+				var $checkAll = $thr.find('input');
+				$checkAll
+						.click(function(event) {
+							/*将所有行的选中状态设成全选框的选中状态*/
+							$tbr.find('input').prop('checked',
+									$(this).prop('checked'));
+							/*并调整所有选中行的CSS样式*/
+							if ($(this).prop('checked')) {
+								$tbr.find('input').parent().parent().addClass(
+										'info');
+							} else {
+								$tbr.find('input').parent().parent()
+										.removeClass('info');
+							}
+							/*阻止向上冒泡，以防再次触发点击操作*/
+							event.stopPropagation();
+						});
+				/*点击全选框所在单元格时也触发全选框的点击操作*/
+				$checkAllTh.click(function() {
+					$(this).find('input').click();
+				});
+				var $tbr = $('#allpointlist tbody tr');
+				var $checkItemTd = $('<td><input type="checkbox" name="checkItem"  style="width: 16px;height: 16px;"/></td>');
+				/*每一行都在最前面插入一个选中复选框的单元格*/
+				$tbr.prepend($checkItemTd);
+				/*点击每一行的选中复选框时*/
+				$tbr
+						.find('input')
+						.click(
+								function(event) {
+									/*调整选中行的CSS样式*/
+									$(this).parent().parent().toggleClass(
+											'info');
+									/*如果已经被选中行的行数等于表格的数据行数，将全选框设为选中状态，否则设为未选中状态*/
+									$checkAll
+											.prop(
+													'checked',
+													$tbr.find('input:checked').length == $tbr.length ? true
+															: false);
+									/*阻止向上冒泡，以防再次触发点击操作*/
+									event.stopPropagation();
+								});
+				/*点击每一行时也触发该行的选中操作*/
+				$tbr.click(function() {
+					$(this).find('input').click();
+				});
+			}
+			initTableCheckbox();
+		});
+	</script>
+</body>
+</html>

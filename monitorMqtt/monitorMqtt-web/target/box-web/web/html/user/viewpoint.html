@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="weconweb">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../css/style.css"/>
+    <link rel="stylesheet" href="../../lib/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../lib/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style type="text/css">
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle !important;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="../../css/page.css"/>
+
+
+</head>
+<body ng-controller="listController" ng-init="onInit()">
+<div class="container">
+    <ol class="breadcrumb" style="margin-top: 40px;">
+        <li><a href="../overview.html">主页</a></li>
+        <li><a href="viewaccountmgr.html">视图账号管理</a></li>
+        <li class="active">{{name}}</li>
+    </ol>
+    <div class="content">
+        <h4>{{title}}</h4>
+        <table class="table table-bordered">
+            <caption>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#showRestOpint"
+                        ng-click="showRestList()">
+                    <span class="glyphicon glyphicon-plus"></span> 分配监控点
+                </button>
+            </caption>
+            <thead>
+            <tr>
+                <th class="col-md-2">序号</th>
+                <th class="col-md-2">名称</th>
+                <th class="col-md-2">所属盒子</th>
+                <th class="col-md-2" ng-if="realpointDatas[0].data_type!=1">权限</th>
+                <th class="col-md-4">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="x in realpointDatas">
+                <td>
+                    {{x.id}}
+                </td>
+                <td>{{x.name}}</td>
+                <td>{{x.deviceName}}</td>
+                <td ng-if="realpointDatas[0].data_type!=1">
+                    {{x.role_type==0?'无权限':(x.role_type==1?'只读':(x.role_type==2?'只写':'读写'))}}
+                </td>
+                <td>
+                    <button ng-if="type!=1" type="button" class="btn btn-info" data-toggle="modal" data-target="#updateRoleSyle" name="chgRightbut"
+                            ng-click="updateViewPointRoleTypeParam(x.id)">修改权限
+                    </button>
+                    <a href="#" data-toggle="modal" data-target="#realunbind">
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delectOpint"
+                                ng-click="deleteOpintParam(x.id,x.role_type)">
+                            解除关联
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p>
+
+        <div style="margin-bottom: 40px">
+            <tm-pagination conf="paginationConf"></tm-pagination>
+        </div>
+        </p>
+    </div>
+    <!-- 修改权限模态框（Modal） -->
+    <div class="modal fade" id="updateRoleSyle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        修改监控点状态
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>监控点权限:</td>
+                            <td>
+                                <label class="radio-inline">
+                                    <input type="radio" name="roleType" value="1" checked> 只读
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="roleType" value="3"> 读写
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="updateViewPointRoleType()">
+                        提交更改
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+
+    <!-- 解除关联模态框（Modal） -->
+    <div class="modal fade" id="delectOpint" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        确定解除关联！
+                    </h4>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="deleteOption()" id="btn_deleteOption">
+                        提交更改
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+    </div><!-- /.modal -->
+
+    <!--监控点分配模态窗口-->
+    <div class="modal fade" id="showRestOpint" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" id="modal-content-id">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        分配余下监控点
+                    </h4>
+                </div>
+                <div class="modal-body " style="height: 450px;" id="model-body-id">
+                    <iframe id="myiframe"
+                            frameborder="0" marginheight="0"
+                            marginwidth="0" width="100%" height="100%"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn_cancelSetOption" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="button" id="btn_setViewOpint" class="btn btn-primary" ng-click="setViewOpint()">
+                        确定
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+    </div><!-- /.modal -->
+</div>
+</div>
+<script src="../../lib/jquery/jquery-3.2.1.min.js"></script>
+<script src="../../lib/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../../lib/angular/angular.min.js" type="text/javascript"></script>
+<script src="../../lib/wecon-common.js" type="text/javascript"></script>
+<script src="../../js/user/viewpoint.js?v=3" type="text/javascript"></script>
+<script src="../../lib/pagination.js" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+.text-m-r2{
+	margin-right: 2px;
+}
+.text-m-l2{
+	margin-left: 3px;
+}
+/*后面是自己写的*/
+#myModal2 .row span,#addConfig .row span{
+	font-size:15px;
+	line-height:30px;
+}
+
+#myModal2 label,#addConfig label,#addpoint .row label{
+	font-size:15px;
+	line-height:15px;
+}
+
+#myModal2 .col-sm-7,#myModal2 .col-sm-9{
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#dev_firm .row span{
+	font-size: 15px;
+	font-family: "微软雅黑";
+	line-height: 34px;
+	text-shadow: 1px 1px 1px gainsboro;
+	padding-left: 30px;
+}
+#dev_firm .row button{
+	margin-bottom: 0px;
+	margin-left: 30px;
+}
+
+.checkboxStyle{
+	border:none;
+	width: 15px;
+	height: 15px;
+	background: none;
+}
+
+/*当前警报样式*/
+#current-alarm .row select{
+	margin-bottom: 10px;
+}
+
+/*添加盒子样式稍作修改*/
+#addPIBox .row{
+	margin: 0px;
+	height: 50px;
+}
+
+/*历史报警样式*/
+.laydate-icon {
+    border-width: 1px;
+    border-image: initial;
+}
+
+.laydate-icon, .laydate-icon-default, .laydate-icon-danlan, .laydate-icon-dahong, .laydate-icon-molv {
+    height: 34px;
+    padding-right: 20px;
+    min-width: 34px;
+    vertical-align: text-top;
+    background-color: rgb(255, 255, 255);
+    background-repeat: no-repeat;
+    background-position: right center;
+    outline: 0px;
+}
+.layer-date {
+    vertical-align: text-top;
+    display: inline-block;
+}
+
+span.history-alarm-text{
+	font-size:15px;
+}
+#history-alarm input[type="text"]{
+	margin-bottom: 5px;
+}
+
+.tr-height{
+	height: 45px;
+}
+
+
+/*报警登记*/
+#addAlarmRecord input[type="radio"]{
+	width: 15px;
+	height: 15px;
+	margin-top: 3px;
+}
+
+button.export-excel{
+	height: 34px;
+	line-height: 10px;
+}
+
+/*历史数据*/
+#original-data select,#original-data input{
+	margin-bottom: 15px;
+}
+span.original-data-text{
+	font-size: 15px;
+}
+@media only screen and (min-width: 1100px) {
+	#original-data .original-data-text-special{
+		margin-left: 20px;
+	}
+}
+
+/*首页*/
+button.main-list{
+	width: 34px;
+	height: 34px;
+	border:2px solod #1ab394;
+	border-radius:17px;
+	margin-top: 10px;
+}
+button.main-list i{
+	font-size:15px;
+}
+
+/*首页样式*/
+/*首页收缩图标*/
+.fixed-top-nav{
+	position: absolute;
+	z-index:999;
+	left: 100%;
+	margin-left: -52px;
+	padding-bottom: 0px;
+}
+@media only screen and (max-width:350px ) {
+	.fixed-top-nav{
+		margin-left: 0px;
+	}
+}
+
+.using-icon{
+	color: #00FF7F;
+}
+.unusing-icon{
+	color: grey;
+}
+

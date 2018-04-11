@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>慧网物联系统 - 邮箱注册</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../css/style.css"/>
+    <link rel="stylesheet" href="../../lib/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="../../lib/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="form row">
+        <div class="col-md-4 col-xs-8 col-sm-6 col-md-offset-4 col-xs-offset-2 col-sm-offset-3 ">
+            <form>
+                <div class="col-md-8 col-md-offset-2 col-xs-8 col-xs-offset-2 col-sm-8 col-sm-offset-2">
+                    <img src="../../image/wecon.png" class="wecon_logo img-responsive"/>
+                </div>
+                <div class="col-md-12 col-xs-12 col-sm-12">
+                    <div class="form-group">
+                        <i class="fa fa-user fa-lg icon"></i>
+                        <input type="text" class="form-control" placeholder="用户名" id="username" required/>
+                    </div>
+                    <div class="form-group">
+                        <i class="fa fa-envelope-o fa-lg icon"></i>
+                        <input type="text" class="form-control" placeholder="邮箱" id="email" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <i class="fa fa-lock fa-lg icon"></i>
+                        <input type="password" class="form-control" placeholder="密码" id="password" required/>
+                    </div>
+                    <div class="form-group">
+                        <i class="fa fa-lock fa-lg icon"></i>
+                        <input type="password" class="form-control" placeholder="再次输入密码" id="confirmpwd" required/>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox" id="checkbox" style="margin-left: 20px">
+                                <input id="cbRegister" type="checkbox" value="">
+                                我已仔细阅读并接受
+                                <a onclick="showUserLicenseModal()" target="_blank">注册条款</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" class="btn btn-info btn-sm btn-block center-block" id="signup" value="注册"/>
+                    </div>
+                    <hr/>
+                    <a href="phoneregister.html" id="mailregister">手机号注册？</a>
+                    <a href="login.html" id="btn_to_login" class="befloat">返回登录</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document" style="margin-top: 350px;text-align: center">
+        <img src="../../image/loading.jpg"/>
+    </div>
+</div>
+
+<!--注册条款的modal-->
+<div class="modal fade" id="userLicenseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" id="modal-content-id">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    V-BOX用户许可协议
+                </h4>
+            </div>
+            <div class="modal-body " style="height: 450px;" id="model-body-id" >
+                <iframe id="myiframe" src="../user/userLicense.html"
+                        frameborder="0" marginheight="0"
+                        marginwidth="0" width="100%" height="100%"></iframe>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button"  class="btn btn-primary"data-dismiss="modal">
+                    确定
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div><!-- /.modal -->
+</body>
+<script src="../../lib/jquery/jquery-3.2.1.min.js"></script>
+<script src="../../lib/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../../lib/wecon-common.js" type="text/javascript"></script>
+<script src="../../js/user/mailregister.js?v=1"></script>
+</html>

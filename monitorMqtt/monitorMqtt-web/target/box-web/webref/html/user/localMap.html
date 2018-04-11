@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html ng-app="weconweb">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="../../lib/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="../../lib/base.css"/>
+
+    <style type="text/css">
+        body, html, #allmap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+    </style>
+    <title>地图展示</title>
+</head>
+<body ng-controller="infoController">
+<div class="row" style="margin:0 0 15px 0" id="map_input">
+    <div class="form-inline">
+        <span class="form-label"> 请输入:</span>
+            <input type="text" class="form-control" id="suggestId" size="80" value="" style=""/>
+            <button class="btn btn-primary" onclick="mapSearchCommit()">搜索</button>
+
+    </div>
+</div>
+
+
+
+<div id="searchResultPanel"
+     style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;">
+</div>
+<div id="allmap"></div>
+</body>
+</html>
+<script src="../../lib/jquery/jquery.min.js" type="text/javascript"></script>
+<script src="../../lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../../lib/angular/angular.min.js" type="text/javascript"></script>
+<script src="../../lib/sockjs/sockjs.min.js" type="text/javascript"></script>
+<script src="../../lib/wecon-common.js" type="text/javascript"></script>
+<script src="../../lib/angular/angular.min.js" type="text/javascript"></script>
+<script src="../../lib/sweetalert.min.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=22nCxldLGEbsQ3gXBNTwhF4Te4UDzECE"></script>
+<script type="text/javascript">
+    var publicMap ;
+    var init = function () {
+        //延时加载
+        setTimeout(function () {
+        }, 300);
+        // 百度地图API功能
+        var map = new BMap.Map("allmap");    // 创建Map实例
+        publicMap = map;
+
+        map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+        map.centerAndZoom(new BMap.Point(119.310369, 26.082246), 9);
+
+        /*
+         * 根据盒子经纬度定位为中心
+         * */
+        var parentDocument = window.parent.document;
+//        var appElement = parentDocument.querySelector("[ng-controller=infoController]");
+//        var $scope = angular.element(appElement).scope();
+
+        var map_a = parentDocument.getElementById("map_a").value;
+        var map_o = parentDocument.getElementById("map_o").value;
+
+
+        var loadCount = 1;
+        map.addEventListener("tilesloaded",function(){
+            if(loadCount == 1){
+                if (map_a == "" && map_o == "") {
+                    map.centerAndZoom(new BMap.Point(119.310369, 26.082246), 9);
+                } else if (map_a == "") {
+                    map_a = 0;
+                    map.centerAndZoom(new BMap.Point(map_a, map_o), 9);
+                } else if (map_o == "") {
+                    map_o = 0;
+                    map.centerAndZoom(new BMap.Point(map_a, map_o), 9);
+                } else {
+                    console.log("获取得到该点,",map_a,map_o);
+                    map.centerAndZoom(new BMap.Point(map_a, map_o), 9);
+                }
+            }
+            loadCount = loadCount + 1;
+        });
+
+
+
+
+        /*
+         * 添加右键功能
+         * */
+        var s;//经度
+        var w;//纬度
+        map.addEventListener("rightclick", function (e) {
+            if (e.overlay) {//判断右键单击的是否是marker
+            } else {
+                s = e.point.lng;//经度
+                w = e.point.lat;//维度
+                RightClick();//右键单击map出现右键菜单事件
+            }
+        });
+        //右键单击map出现右键菜单事件
+        function RightClick() {
+            var createMarker = function (map) {//右键更新站名
+                if (true) {
+//                        $scope.mapinfoModalShow(s, w);
+                    swal({
+                        title: "确定将该点经度:" + s + " 纬度:" + w + "定位给盒子",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    }).then(function (isok) {
+                        if (isok) {
+                            parentDocument.getElementById("map_a").value = s;
+                            parentDocument.getElementById("map_o").value = w;
+                            window.parent.localMapModalHide();
+                        }
+                    });
+                }
+            };
+            var markerMenu = new BMap.ContextMenu();
+            markerMenu.addItem(new BMap.MenuItem('盒子位置', createMarker.bind(map)));
+            map.addContextMenu(markerMenu);//给标记添加右键菜单
+        }
+
+        /*
+         * 设置标注点
+         * */
+        var boxTag = new BMap.Point(map_a, map_o);
+        console.log("获取得到", map_a, map_o);
+        var label = new BMap.Label("device_name", {offset: new BMap.Size(20, -10)});
+        var marker = new BMap.Marker(boxTag);
+        map.addOverlay(marker);
+
+
+        /*
+         * 地图搜索功能
+         * */
+        var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+                {
+                    "input": "suggestId",
+                    "location": map
+                });
+        ac.addEventListener("onhighlight", function (e) {  //鼠标放在下拉列表上的事件
+            var str = "";
+            var _value = e.fromitem.value;
+            var value = "";
+            if (e.fromitem.index > -1) {
+                value = _value.province + _value.city + _value.district + _value.street + _value.business;
+            }
+            str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+            value = "";
+            if (e.toitem.index > -1) {
+                _value = e.toitem.value;
+                value = _value.province + _value.city + _value.district + _value.street + _value.business;
+            }
+            str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value + "style='z-index:999;'position:'fixed'";
+            G("searchResultPanel").innerHTML = str;
+        });
+        var myValue;
+        ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+            var _value = e.item.value;
+            myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+            G("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+            setPlace();
+        });
+        function setPlace() {
+            map.clearOverlays();    //清除地图上所有覆盖物
+            function myFun() {
+                var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+                map.centerAndZoom(pp, 18);
+                map.addOverlay(new BMap.Marker(pp));    //添加标注
+            }
+
+            var local = new BMap.LocalSearch(map, { //智能搜索
+                onSearchComplete: myFun
+            });
+            local.search(myValue);
+        }
+
+        function G(id) {
+            return document.getElementById(id);
+        }
+
+
+    }
+//    window.onload = init;
+
+
+    var mapSearchCommit = function () {
+        var local = new BMap.LocalSearch(publicMap, {
+            renderOptions: {map: publicMap, panel: "r-result"}
+        });
+        local.search($("#suggestId").val());
+    }
+
+    var appModule = angular.module('weconweb', []);
+    appModule.controller("infoController", function ($scope, $http, $compile) {
+
+
+    });
+
+
+</script>
+
+<!--<script src="../../js/user/testMap.js" type="text/javascript"></script>-->
+

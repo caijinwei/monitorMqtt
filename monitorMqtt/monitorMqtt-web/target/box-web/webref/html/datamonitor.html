@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="weconweb">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="renderer" content="webkit">
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<link rel="stylesheet" type="text/css" href="../css/style.css" />
+<link rel="stylesheet" type="text/css"
+	href="../lib/bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="../lib/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="../lib/animate.min.css" />
+<link rel="stylesheet" type="text/css" href="../lib/base.css" />
+<link rel="stylesheet" type="text/css" href="../css/style.css" />
+<link rel="stylesheet"
+	href="../lib/x-editable-1.5.1/css/bootstrap-editable.css">
+<link href="../lib/loader.css" rel="stylesheet">
+<link href="../css/page.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet"
+	href="../lib/bootstrap/bootstrap-switch/css/bootstrap-switch.min.css">
+<script src="../lib/jquery/jquery.min.js"></script>
+<!--低版本浏览器识别HTML5标签-->
+<!--低版本浏览器支持CSS媒体查询-->
+<!--[if lt IE 9]>
+	    	<script type="text/javascript" src="lib/html5shiv/html5shiv-printshiv.min.js" ></script>
+	    	<script type="text/javascript" src="lib/respond/respond.min.js" ></script>
+	    <![endif]-->
+	<style>
+        table tbody tr td p{
+            margin: 0px;
+        }
+
+
+	</style>
+</head>
+<div id="loader-wrapper">
+	<div id="loader"></div>
+	<div class="loader-section section-left"></div>
+	<div class="loader-section section-right"></div>
+	<div class="load_title">正在加载....</div>
+</div>
+
+<body ng-controller="infoController" ng-init="onInit()">
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs" role="tablist" id="monitorTab"
+		style="margin-top: 20px;">
+
+		<li ng-repeat="x in dir_list"
+			ng-class="{active:x.id==dir_list[0].id && type==0 }"><a
+			href="#data-item-1" data-toggle="tab" id="actgroupId"
+			ng-click="ws_send(paginationConf.currentPage,paginationConf.itemsPerPage,x.id);">{{x.name}}</a>
+		</li>
+
+
+		<li><a href="#group-setting" data-toggle="tab"> <span
+				class="glyphicon glyphicon-cog"></span> 分组设置
+		</a></li>
+	</ul>
+
+
+	<!-- Tab panes -->
+	<form method="post" id="myform"></form>
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="data-item-1">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-content" style="padding-left: 20px;">
+							<div class="row ibox-solid">
+								<span>
+									<button type="button" class="btn btn-primary" ng-cloak
+										ng-if="accounttype==1 && deviceid>0" data-toggle="modal"
+										data-target="#addpoint" ng-click="addmonitor();"
+										style="margin-right: 15px; margin-left: 15px;">
+										<span class="glyphicon glyphicon-plus"></span>&nbsp;添加监控点
+									</button>
+									<button type="button" class="btn btn-primary"
+										data-toggle="modal" ng-cloak
+										ng-if="(accounttype==1 && deviceid==-100)||(accounttype==2 && deviceid==-200)"
+										data-target="#dispatchpoint" ng-click="showRestList()" style="margin-right: 15px; margin-left: 15px;">
+										<span class="fa fa-indent"></span> &nbsp;分配监控点
+									</button>
+									<button type="button" class="btn btn-primary"
+										data-toggle="modal" ng-cloak
+										ng-if="accounttype==1 && deviceid>0" data-target="#addpoint"
+										ng-click="batchmonitor();">
+										<span class="glyphicon glyphicon-list"
+											style="margin-left: 15px;"></span>&nbsp;批量添加
+									</button>
+								</span>
+							</div>
+							<div class="table-responsive">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th>状态</th>
+											<th>名称</th>
+											<th>数值</th>
+											<th>描述</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="x in actDatas">
+											<td><span ng-if="x.box_state==1" ng-switch="{{x.state}}">
+													<span ng-switch-when="0"> <span
+														ng-switch="{{x.re_state}}"><i name="act_i_state"
+															ng-switch-when="0" class="fa  fa-circle"
+															style="color: gray;" data-toggle="tooltip" title="离线"></i><i
+															name="act_i_state" ng-switch-when="1"
+															class="fa  fa-circle" style="color: green;"
+															data-toggle="tooltip" title="在线"></i><i
+															name="act_i_state" ng-switch-when="2"
+															class="fa  fa-circle" style="color: red;"
+															data-toggle="tooltip" title="超时"></i> <i
+															name="act_i_state" ng-switch-default
+															class="fa  fa-circle" style="color: red;"
+															data-toggle="tooltip" title="超时"></i></span>
+
+												</span> <span ng-switch-when="1"> <i name="act_i_state"
+														class="fa  fa-circle" style="color: orange;"
+														data-toggle="tooltip" title="条目未下发"></i></span> <span
+													ng-switch-when="2"><i name="act_i_state"
+														class="fa  fa-circle" style="color: orange;"
+														data-toggle="tooltip" title="条目未下发"></i></span> <span
+													ng-switch-when="-1"><i name="act_i_state"
+														class="fa  fa-circle" style="color: black;"
+														data-toggle="tooltip" title="编译失败"></i></span> <span
+													ng-switch-when="-2"><i name="act_i_state"
+														class="fa  fa-circle" style="color: black;"
+														data-toggle="tooltip" title="地址转义失败"></i></span> <span
+													ng-switch-when="-3"><i name="act_i_state"
+														class="fa  fa-circle" style="color: black;"
+														data-toggle="tooltip" title="地址绑定失败"></i> </span> <span
+													ng-switch-default><i name="act_i_state"
+														class="fa  fa-circle" style="color: black;"
+														data-toggle="tooltip" title="未知状态"></i> </span>
+
+											</span> <span ng-if="x.box_state==0"><i name="act_i_state"
+													class="fa  fa-circle" style="color: gray;"
+													data-toggle="tooltip" title="离线"></i></span></td>
+											<td><a href="#" id="act_name_{{x.id}}"
+												ng-if="(accounttype==1&&deviceid<0)||(accounttype==2)"
+												ng-click="editable_name(x,1);">{{x.ref_alais==''?x.name:x.ref_alais}}</a><span
+												ng-if="(accounttype==1&&deviceid>0)">{{x.ref_alais==''?x.name:x.ref_alais}}</span></td>
+											<td><a href="#" id="act_value_{{x.id}}"
+												ng-click="editable_value(x,1);"
+												ng-if="(accounttype==1&&x.addr_type!=0)||(accounttype==2&&x.role_type==3&&x.addr_type!=0)">{{x.re_value}}</a><span
+												style="float: right;"
+												ng-if="(accounttype==1&&x.addr_type!=0)||(accounttype==2&&x.role_type==3&&x.addr_type!=0)">{{x.ext_unit}}</span><span
+												ng-if="accounttype==2&&x.role_type!=3&&x.addr_type!=0">{{x.re_value}}</span><span
+												style="float: right;"
+												ng-if="accounttype==2&&x.role_type!=3&&x.addr_type!=0">&nbsp;&nbsp;{{x.ext_unit}}</span>
+												<p
+													ng-if="(accounttype==1&&x.addr_type==0)||(accounttype==2&&x.role_type==3&&x.addr_type==0)"
+													class="switch" id="mySwitch_{{x.id}}">
+													<input name="switch-state" type="checkbox" data-bit="{{x}}">
+												</p>
+												<p ng-if="(accounttype==2&&x.role_type!=3&&x.addr_type==0)"
+													class="switch" id="mySwitch_{{x.id}}">
+													<input name="switch-state" type="checkbox" data-bit="{{x}}"
+														checked disabled>
+												</p></td>
+											<td>{{x.describe}}</td>
+											<td><a href="" title="编辑" data-toggle="modal"
+												data-target="#addpoint" ng-cloak
+												ng-if="accounttype==1&& deviceid>0"
+												ng-click="editmonitor(x);"> <span
+													class="glyphicon glyphicon-edit"
+													style="font-size: 16px; color: #32a696; margin-left: 10px;"></span>
+													编辑
+											</a> <a href="" title="复制" data-toggle="modal"
+												data-target="#copyDataGroup" ng-cloak ng-if="deviceid<0"
+												ng-click="copymonitor(x);"> <span
+													class="glyphicon glyphicon-file"
+													style="font-size: 16px; color: #32a696; margin: 10px;margin-right: 3px;"></span>
+													复制
+											</a> <a href="" title="移动分组" data-toggle="modal"
+												data-target="#moveDataGroup" ng-click="movemonitor(x);">
+													<span class="glyphicon glyphicon-resize-horizontal"
+													style="font-size: 16px; color: #32a696; margin: 10px;margin-right: 3px;"></span>
+													移动
+											</a> <a href="" title="移除" data-toggle="modal" ng-cloak
+												ng-if="deviceid<0" data-target="#deletePoint"
+												ng-click="remonitor(x);"> <span
+													class="glyphicon glyphicon-trash"
+													style="font-size: 16px; color: #32a696;margin: 10px;margin-right: 3px;"></span>
+													移除
+											</a> <a href="" title="删除" data-toggle="modal"
+												data-target="#deletePoint" ng-cloak
+												ng-if="accounttype==1&& deviceid>0"
+												ng-click="delmonitor(x);"> <span
+													class="glyphicon glyphicon-trash"
+													style="font-size: 16px; color: #32a696; margin: 10px;margin-right: 3px;"></span>
+													删除
+											</a></td>
+										</tr>
+									</tbody>
+								</table>
+								<tm-pagination conf="paginationConf"></tm-pagination>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div role="tabpanel" class="tab-pane" id="group-setting">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-content" style="padding-left: 20px;">
+							<div class="row ibox-solid">
+								<span>
+									<button type="button" class="btn btn-primary"
+										data-toggle="modal" data-target="#addDataGroup"
+										style="margin-right: 15px; margin-left: 15px;">
+										<span class="glyphicon glyphicon-plus"></span>&nbsp;添加分组
+									</button>
+								</span>
+							</div>
+							<div class="table-responsive">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th>分组名称</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="x in dir_list">
+											<td>{{x.name}}</td>
+											<td><a href=""> <span
+													class="glyphicon glyphicon-edit" data-toggle="modal"
+													ng-click="editGroup(x)"
+													style="font-size: 16px; color: #32a696; margin: 10px;"></span>
+											</a> <a href=""> <span class="glyphicon glyphicon-trash"
+													data-toggle="modal" ng-click="delGroup(x)"
+													style="font-size: 16px; color: #32a696; margin: 10px;"></span>
+											</a></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+	<div class="modal inmodal fade" id="addpoint" tabindex="-1"
+		role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content animated">
+				<div class="modal-header" style="padding: 15px 10px;">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h5 class="modal-title">{{showtype==0?"添加监控数据":showtype==1?"编辑监控数据":"批量监控数据"}}</h5>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="tabs-container">
+								<div class="tab-content">
+									<div id="tab-1" class="tab-pane active">
+										<form method="post" class="form-horizontal" name="" id=""
+											action="">
+											<div class="form-group row col-md-12">
+												<label class="col-md-3 control-label">名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</label>
+												<div class="col-md-9">
+													<input class="form-control" type="text" name="nameid"
+														id="nameid" placeholder="请输入少于50位的字符" maxlength="50">
+												</div>
+											</div>
+											<div class="form-group row col-md-12">
+												<label class="col-md-3 control-label">连接设备</label>
+												<div class="col-md-9">
+													<select class="form-control" id="conid">
+														<option ng-repeat="x in infoDatas" value="{{x.plcId}}">{{$index+1}}-{{x.port}}</option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group row col-md-12">
+												<label class="col-md-3 control-label">地址类型</label>
+												<div class="col-md-3">
+													<select class="form-control" id="addrtypeid">
+														<option ng-repeat="x in allAddrs" value="{{x.addrkey}}">{{x.addrkey==0?"位地址":x.addrkey==1?"字节地址":x.addrkey==2?"字地址":"双字"}}</option>
+
+													</select>
+												</div>
+												<label class="col-md-3 control-label">寄存器类型</label>
+												<div class="col-md-3">
+													<select id="registerid" class="form-control">
+														<option ng-repeat="x in addrvalues"
+															value="{{x.addrvalue}}">{{x.addrvalue}}</option>
+
+													</select>
+												</div>
+											</div>
+											<div class="form-group row col-md-12" id="registeraddr">
+												<label class="col-md-3 control-label">寄存器地址<br />(主编号)
+												</label>
+												<div class="col-md-3">
+													<input id="addrid" type="text" class="form-control" />
+												</div>
+												<label class="col-md-5 control-label">主编号:<lable
+														id="rangid"></lable> <lable>(</lable> <lable id="scaleid"></lable>
+													<lable>)</label></label>
+
+											</div>
+											<div class="form-group row col-md-12" id="child_registeraddr">
+												<label class="col-md-3 control-label">寄存器地址<br />(子编号)
+												</label>
+												<div class="col-md-3">
+													<input id="child_addrid" type="text" class="form-control" />
+												</div>
+												<label class="col-md-5 control-label">字编号:<lable
+														id="child_rangid"></lable> <lable>(</lable> <lable
+														id="child_scaleid"></lable> <lable>)</label></label>
+
+											</div>
+											<div class="form-group row col-md-12" id="div_unit">
+												<label class="col-md-3 control-label">单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位</label>
+												<div class="col-md-9">
+													<input class="form-control" type="text" name="unitid"
+														id="unitid" placeholder="请输入少于20位的字符" maxlength="20">
+												</div>
+											</div>
+											<div class="form-group row col-md-12" id="divdatatypeid">
+												<label class="col-md-3 control-label">数据格式</label>
+												<div class="col-md-9">
+													<select class="form-control" id="datatypeid">
+														<option ng-repeat="x in dataTypes" value="{{x.value}}"
+															ng-if="x.value!=400&&x.value!=401&&x.value!=402&&x.value!=403&&x.value!=404&&x.value!=405">{{x.text}}</option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group row col-md-12" id="datadigitid">
+												<label class="col-md-3 control-label">整数位数</label>
+												<div class="col-md-3">
+													<input class="form-control" type="text" id="dataid">
+												</div>
+												<label class="col-md-3 control-label">小数位数</label>
+												<div class="col-md-3">
+													<input class="form-control" type="text" id="decid">
+												</div>
+											</div>
+											<div class="form-group row col-md-12" id="div_stringid">
+
+												<label class="col-md-3 control-label">操作字符</label>
+												<div class="col-md-3">
+													<input id="stringid" type="text" class="form-control" />
+												</div>
+												<label class="col-md-5 control-label">个&nbsp;(1~256)</label>
+
+											</div>
+											<div class="form-group row col-md-12" id="diediv_id">
+
+												<label class="col-md-3 control-label">死区设置</label>
+												<div class="col-md-3">
+													<input id="dieid" type="text" class="form-control" />
+												</div>
+												<label class="col-md-5 control-label">当值在±0.01范围内波动时，不上包数据以节省流量</label>
+
+											</div>
+											<div class="form-group row col-md-12" id="divbatchid">
+												<label class="col-md-3 control-label">批量个数</label>
+												<div class="col-md-3">
+													<input type="number" min="1" max="40" class="form-control"
+														value="1" id="batchid" />
+												</div>
+												<label class="col-md-3 control-label">增量</label>
+												<div class="col-md-3">
+													<input type="number" class="form-control" value="1"
+														id="increaseid" />
+												</div>
+											</div>
+											<div class="form-group row col-md-12">
+												<label class="col-md-3 control-label">描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;述</label>
+												<div class="col-md-9">
+													<input class="form-control" type="text" name="describeid"
+														id="describeid" placeholder="请输入少于50位的字符" maxlength="50">
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary"
+						ng-click="saveupmonitor()">确定</button>
+					<button type="button" class="btn btn-white closeModal"
+						data-dismiss="modal">取消</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 复制监控点 -->
+	<div class="modal inmodal fade" id="copyDataGroup" tabindex="-1"
+		role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header" style="padding: 15px 10px;">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<p class="modal-title">复制监控点</p>
+				</div>
+				<div class="modal-body" style="padding: 15px 10px;">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="tabs-container">
+								<div class="tab-content">
+									<div id="tab-1" class="tab-pane active">
+										<form method="post" class="form-horizontal" name="" id=""
+											action="">
+											<div class="form-group row col-md-12">
+												<label class="col-md-4 control-label">当前分组</label>
+												<div class="col-md-8">
+													<label class="control-label" id="nowgroupid"></label>
+												</div>
+											</div>
+											<div class="form-group row col-md-12">
+												<label class="col-md-4 control-label">复&nbsp;&nbsp;制&nbsp;到</label>
+												<div class="col-md-8">
+													<select id="copymonitorid" class="form-control">
+														<option ng-repeat="x in dir_list" value={{x.id}}>{{x.name}}</option>
+													</select>
+												</div>
+											</div>
+
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary"
+						ng-click="copy_monitor_group()">确定</button>
+					<button type="button" class="btn btn-white" data-dismiss="modal">
+						取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 移动监控点 -->
+	<div class="modal inmodal fade" id="moveDataGroup" tabindex="-1"
+		role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header" style="padding: 15px 10px;">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<p class="modal-title">移动监控点</p>
+				</div>
+				<div class="modal-body" style="padding: 15px 10px;">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="tabs-container">
+								<div class="tab-content">
+									<div id="tab-1" class="tab-pane active">
+										<form method="post" class="form-horizontal" name="" id=""
+											action="">
+											<div class="form-group row col-md-12">
+												<label class="col-md-4 control-label">当前分组</label>
+												<div class="col-md-8">
+													<label class="control-label" id="movenowgroupid"></label>
+												</div>
+											</div>
+											<div class="form-group row col-md-12">
+												<label class="col-md-4 control-label">移&nbsp;&nbsp;动&nbsp;到</label>
+												<div class="col-md-8">
+													<select id="movemonitorid" class="form-control">
+														<option ng-repeat="x in dir_list" value={{x.id}}>{{x.name}}</option>
+													</select>
+												</div>
+											</div>
+
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary"
+						ng-click="move_monitor_group()">确定</button>
+					<button type="button" class="btn btn-white" data-dismiss="modal">
+						取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 创建分组 -->
+	<div class="modal inmodal fade" id="addDataGroup" tabindex="-1"
+		role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header" style="padding: 15px 10px;">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<p class="modal-title">创建分组</p>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="form-group" style="padding-top: 20px;">
+								<input type="text" class="form-control form-pading"
+									placeholder="请输入少于15位字符的名称" id="newGroupName"
+									name="newGroupName" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary"
+						ng-click="add_group();">确定</button>
+					<button type="button" class="btn btn-white" data-dismiss="modal">取消</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 编辑分组 -->
+	<div class="modal inmodal fade" id="editGroupName" tabindex="-1"
+		role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header" style="padding: 15px 10px;">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<p class="modal-title">编辑分组</p>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="form-group" style="padding-top: 20px;">
+								<input type="text" class="form-control form-pading"
+									placeholder="请输入少于15位字符的名称" id="editid" onfocus="this.select()"
+									autofocus="autofocus" name="newGroupName" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary"
+						ng-click="edit_group();">确定</button>
+					<button type="button" class="btn btn-white" data-dismiss="modal">取消</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 分配监控点 -->
+	<div class="modal inmodal fade" id="dispatchpoint" tabindex="-1"
+		role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header" style="padding: 15px 10px;">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<p class="modal-title">分配监控点</p>
+				</div>
+				<div class="modal-body" style="min-height: 450px;"
+					id="model-body-id">
+					<iframe id="myiframe" class="J_iframe" height="100%" width="100%"
+						style="min-height: 500px;" frameborder="0"> </iframe>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary"
+						ng-click="setViewOpint()">确定</button>
+					<button type="button" class="btn btn-white" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="../lib/bootstrap/js/bootstrap.min.js?v=3.3.6"></script>
+	<script src="../lib/sweetalert.min.js"></script>
+	<script src="../lib/angular/angular.min.js" type="text/javascript"></script>
+	<script src="../lib/x-editable-1.5.1/js/bootstrap-editable.min.js"></script>
+	<script src="../lib/wecon-common.js" type="text/javascript"></script>
+	<script src="../js/datamonitor.js?v=1" type="text/javascript"></script>
+	<script src="../lib/pagination.js" type="text/javascript"></script>
+	<script src="../lib/bootstrap/bootstrap-switch/js/highlight.js"></script>
+	<script
+		src="../lib/bootstrap/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+
+</body>
+
+</html>

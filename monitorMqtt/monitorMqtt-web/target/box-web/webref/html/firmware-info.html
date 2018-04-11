@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="weconweb">
+<head>
+    <meta charset="utf-8"/>
+    <title>固件管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="stylesheet" type="text/css" href="../lib/bootstrap/css/bootstrap.css"/>
+    <link href="../lib/webuploader/webuploader-style.css" rel="stylesheet" type="text/css"/>
+    <link href="../lib/webuploader/webuploader.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/animate.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <!--低版本浏览器识别HTML5标签-->
+    <!--低版本浏览器支持CSS媒体查询-->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv/html5shiv-printshiv.min.js"></script>
+    <script type="text/javascript" src="lib/respond/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        label {
+            font-size: 15px;
+            font-weight: 200;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+    </style>
+</head>
+
+<body ng-controller="infoController" ng-init="onInit()">
+<div class="container" style="padding-top: 40px;width:100%;">
+    <div class="row">
+        <div class="col-sm-12" style="margin: 0 auto;">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content" style="padding-left: 20px;">
+                    <div class="alert alert-success"
+                         style="background: rgb(26,164,140); color:white;margin-bottom: 30px;">
+                        <span style="font-size: 15px;">主页 > 固件版本管理</span>
+                    </div>
+
+                    <div class="container" id="info">
+                        <div class="row" style="margin-bottom: 15px;">
+                            <div class="col-md-12">
+                                <label class="col-md-2 control-label">设备型号</label>
+
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" id="dev_model" placeholder="设备型号"
+                                           required="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-md-2 control-label">名称<br>(升级固件的标识)</label>
+
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" id="firm_info" placeholder="名称(升级固件的标识)"
+                                           required="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 15px;">
+                            <div class="col-md-12">
+                                <label class="col-md-2 control-label">版本号</label>
+
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="version_code" placeholder="版本号"
+                                           required="" readonly="">
+                                </div>
+                                <label class="col-md-1 control-label">版本名称</label>
+
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="version_name" placeholder="版本名称"
+                                           required="" readonly="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="upload_div">
+                            <div class="col-md-12">
+                                <label class="col-md-2 control-label">固件升级文件</label>
+
+                                <div class="col-md-9">
+                                    <!--用来存放文件信息-->
+                                    <div id="thelist" class="uploader-list"></div>
+                                    <div class="btns" id="selectFileCard">
+                                        <div id="pickerFile" class="btn">选择</div>
+                                        <div id="fileCard" class="uploader-list"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-md-2 control-label">文件名</label>
+
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="file_name" placeholder="文件名" required=""
+                                           readonly="">
+                                    <input type="hidden" class="form-control" id="file_id" placeholder="上传文件"
+                                           required="">
+                                </div>
+                                <label class="col-md-1 control-label">大小(字节)</label>
+
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="file_size" placeholder="大小(字节)"
+                                           required="" readonly="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <label class="col-md-2 control-label">升级文件下载地址</label>
+
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" id="file_url" placeholder="升级文件下载地址"
+                                           required="" readonly="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <label class="col-md-2 control-label">升级文件MD5</label>
+
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" id="file_md5" placeholder="升级文件MD5"
+                                           required="" readonly="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <label class="col-md-2 control-label">说明信息</label>
+
+                                <div class="col-md-9">
+                                    <textarea class="form-control" id="description" rows="5" placeholder="说明信息"
+                                              maxlength="3000"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        </div>
+                        <div class="col-md-5">
+
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-inline">
+                                <button type="button" class="btn btn-primary" ng-click="backList()"
+                                        style="margin-right: 15px;">返回
+                                </button>
+                                <button type="button" class="btn btn-primary" ng-click="save()">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+<script src="../lib/jquery/jquery.min.js?v=2.1.4"></script>
+<script src="../lib/bootstrap/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="../lib/sweetalert.min.js"></script>
+<script src="../lib/angular/angular.min.js" type="text/javascript"></script>
+<script src="../lib/webuploader/webuploader.min.js" type="text/javascript"></script>
+<script src="../lib/wecon-common.js" type="text/javascript"></script>
+<script src="../js/firmware-info.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    /*function openBrowse() {
+        var ie = navigator.appName == "Microsoft Internet Explorer" ? true : false;
+        if (ie) {
+            document.getElementById("file").click();
+            document.getElementById("filename").value = document.getElementById("file").value;
+        } else {
+            var a = document.createEvent("MouseEvents");//FF的处理
+            a.initEvent("click", true, true);
+            document.getElementById("file").dispatchEvent(a);
+        }
+    }*/
+</script>
+
+</body>
+
+</html>

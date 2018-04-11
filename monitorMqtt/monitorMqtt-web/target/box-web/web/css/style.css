@@ -1,0 +1,339 @@
+@charset "utf-8";
+
+/*
+login.html、
+phoneregister.html、
+mailregister.html
+*/
+.a {
+	height: 100px;
+	background-color: #eee;
+	border: 1px solid #ccc;
+}
+
+.wecon_logo {
+	width: 200px;
+	height: auto;
+}
+
+.icon {
+	display: inline-block;
+	top: 27px;
+	left: 6px;
+	position: relative;
+	color: #ccc;
+}
+
+.innericon {
+	display: inline-block;
+	top: 30px;
+	left: 6px;
+	position: relative;
+	color: #ccc;
+}
+
+.vercode {
+	display: inline-block;
+	position: relative;
+	color: #ccc;
+}
+
+input[type="text"], input[type="password"] {
+	padding-left: 26px;
+}
+
+input[type="submit"] {
+	margin-top: 15px;
+}
+
+#getvercode {
+	padding-left: 2px;
+}
+
+.form {
+	margin: 100px auto;
+}
+
+.form-group {
+	margin: 5px 0px;
+}
+
+.befloat {
+	float: right;
+}
+
+#divvercode {
+	margin-top: 22px;
+}
+
+#checkbox {
+	margin: 15px 0px;
+}
+
+/*
+* main.html
+*/
+.main-body {
+	height: 100%;
+}
+
+.wrap {
+	height: 100%;
+}
+
+.input-group input {
+	font-size: 12px;
+	padding-left: 5px;
+}
+
+.left-header {
+	height: 100px;
+	padding-top: 40px;
+}
+
+#logo {
+	height: 40px;
+}
+
+.menu-title {
+	margin-left: 15px;
+	color: #828e9a;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#side_nav ul {
+	display: none;
+}
+
+.btn-item {
+	font-size: 12px;
+}
+
+.list-group-item {
+	margin-left: -40px;
+}
+
+.userinfo {
+	color: #000000;
+}
+
+.userinfo:hover {
+	color: cornflowerblue;
+}
+
+.glyphicon-log-out {
+	font-size: 14px;
+}
+
+#left {
+	border-right: 1px solid #eee;
+	/*background-color: #EFF3F6;*/
+	background-image: url("../image/bg04.jpg");
+	height: 100%;
+}
+
+.main-btn-group {
+	margin-top: 10px;
+}
+
+.wrap ul li a span {
+	color: #828e9a;
+	padding: 10px 0px;
+	height: 40px;
+	width: 300px;
+}
+
+#side_nav {
+	list-style-type: none;
+	margin-left: -40px;
+	margin-top: 20px;
+	font-weight: bold;
+}
+
+#side_nav li ul {
+	list-style-type: none;
+}
+
+#right {
+	background-color: #fff;
+	height: 100%;
+}
+
+#right iframe {
+	width: 100%;
+	height: 100%;
+}
+
+#btn-home {
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+}
+
+#btn-group-mgr {
+	border-radius: 0;
+}
+
+#btn-viewaccount {
+	border-radius: 0;
+}
+
+#btn-setting {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+/*.glyphicon-ok{
+    color: #2889d0;
+}*/
+.container-fluid table tbody tr td a {
+	text-decoration: none;
+}
+
+.container-fluid table tbody tr td a span {
+	color: #2889d0;
+	margin: 10px;
+}
+
+/* 小屏幕（平板，大于等于768px） */
+@media ( min-width : 768px) {
+	#logo {
+		display: none;
+	}
+}
+/* 中等屏幕（桌面显示器，大于等于992px） */
+@media ( min-width : 992px) {
+	#logo {
+		display: block;
+	}
+}
+/* 大屏幕（大桌面显示器，大于等于1200px） */
+@media ( min-width : 1200px) {
+	#logo {
+		display: block;
+	}
+}
+
+/*overview.html*/
+.row {
+	margin-right: 15px;
+	margin-left: 15px;
+}
+
+.state-overview {
+	margin-top: 20px;
+}
+
+.state-overview .state-panel {
+	padding: 20px 20px;
+	margin-bottom: 10px;
+	/*background-color: #EFF3F6;*/
+	background-image: url("../image/bg04.jpg");
+	border: 1px solid transparent;
+	border-radius: 4px;
+	box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+}
+
+.state-overview .state-panel .state-line {
+	height: 30px;
+	line-height: 30px;
+	white-space: nowrap;
+}
+
+.state-overview .yellow {
+	color: #ffc601;
+}
+
+.state-overview .red {
+	color: #ff3a28;
+}
+
+.state-overview .purple {
+	color: #9b3edc;
+}
+
+.state-overview .blue {
+	color: #2889d0;
+}
+
+.blue {
+	color: #2889d0;
+}
+
+.fa-2 {
+	font-size: 2em;
+}
+
+.state-overview .state-panel .state-desc {
+	color: #737373;
+	font-size: 12px;
+}
+
+.state-overview .state-panel .state-value {
+	width: 62%;
+	display: inline-block;
+	font-size: 30px;
+	font-weight: 500;
+}
+
+/*setting.html*/
+.setting-item {
+	margin: 5px;
+	border: 1px solid transparent;
+	transition: box-shadow 0.3s;
+}
+
+.setting-item a {
+	text-decoration: none;
+}
+
+.setting-item:hover {
+	opacity: 0.8;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	background-image: url("../image/bg04.jpg");
+}
+
+.setting-item img {
+	width: 100%;
+	height: auto;
+}
+
+.desc {
+	padding: 15px;
+	text-align: center;
+}
+
+.img-div {
+	text-align: center;
+	margin-top: 15px;
+}
+
+.img-div img {
+	width: 60px;
+	height: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.custom-style {
+	background-color: #337ab7;
+	padding: 10px 0px;
+	height: 40px;
+	width: 300px;
+}
+
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak,
+.x-ng-cloak {
+	display: none !important;
+}
+
+.onlineIcon{
+	margin-right: 10px;
+	color: #4cae4c;
+}
+.offlineIcon{
+	margin-right: 10px;
+	color: grey;
+}

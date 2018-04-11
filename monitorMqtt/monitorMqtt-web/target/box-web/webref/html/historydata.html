@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="weconweb">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="renderer" content="webkit">
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="stylesheet" type="text/css"
+	href="../lib/bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="../lib/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="../lib/animate.min.css" />
+<link rel="stylesheet" type="text/css" href="../lib/base.css" />
+<link rel="stylesheet" type="text/css" href="../css/style.css" />
+<link href="../css/page.css" rel="stylesheet" type="text/css" />
+<link href="../lib/loader.css" rel="stylesheet">
+<script src="../lib/jquery/jquery.min.js"></script>
+<!--低版本浏览器识别HTML5标签-->
+<!--低版本浏览器支持CSS媒体查询-->
+<!--[if lt IE 9]>
+	    	<script type="text/javascript" src="lib/html5shiv/html5shiv-printshiv.min.js" ></script>
+	    	<script type="text/javascript" src="lib/respond/respond.min.js" ></script>
+	    <![endif]-->
+</head>
+<div id="loader-wrapper">
+	<div id="loader"></div>
+	<div class="loader-section section-left"></div>
+	<div class="loader-section section-right"></div>
+	<div class="load_title">正在加载....</div>
+</div>
+<body ng-controller="infoController" ng-init="onInit()">
+	<!-- Nav tabs -->
+	<ul class=" nav
+	nav-tabs" role="tablist">
+		<li role="presentation" class="active"><a href="#original-data"
+			aria-controls="original-data" role="tab" data-toggle="tab"
+			ng-click="commointor_submit();">原始数据</a></li>
+		<li role="presentation"><a href="#data-record"
+			aria-controls="data-record" role="tab" data-toggle="tab" ng-cloak
+			ng-if="accounttype==1 && deviceid>0"
+			ng-click="showhisconf(paginationConf_register.currentPage,paginationConf_register.itemsPerPage);">数据登记</a></li>
+	</ul>
+
+	<!-- Tab panes -->
+	<form method="post" id="myform"></form>
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="original-data">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-content"
+							style="padding-left: 20px; padding-top: 20px;">
+							<div class="form-group row col-md-12">
+								<span class="col-md-1 original-data-text">监控点</span>
+								<div class="col-md-3" style="margin-right: 20px;">
+									<select id="monitorid" class="form-control">
+										<option ng-repeat="x in commonitors" value={{x.id}}>{{x.name}}</option>
+									</select>
+								</div>
+								<div class="btn-group col-md-5" style="margin-right: 20px;">
+									<button id="btn-list" type="button" class="btn btn-primary"
+										ng-click="showListOrCurves('btn-list')">列表</button>
+									<button id="btn-curves" type="button" class="btn btn-default"
+										ng-click="showListOrCurves('btn-curves')"
+										style="margin-right: 40px;">曲线</button>
+									<button type="button" class="btn btn-primary"
+										ng-click="exportExcel();">导出excel</button>
+								</div>
+							</div>
+							<div class="form-group row col-md-12">
+								<span class="col-md-1 original-data-text">起始日期</span>
+								<div class="col-md-3">
+									<input id="startdateid"
+										style="background-image: url(../img/icon.png);"
+										class="laydate-icon form-control layer-date" type="text"
+										value="" />
+								</div>
+								<span
+									class="col-md-1 original-data-text original-data-text-special">结束日期</span>
+								<div class="col-md-3">
+									<input id="enddateid"
+										style="background-image: url(../img/icon.png);"
+										class="laydate-icon form-control layer-date" type="text">
+								</div>
+								<div class="col-md-2">
+									<button class="btn btn-primary" type="button"
+										style="margin-right: 15px;" id="searchid"
+										ng-click="searchHisData(paginationConf.currentPage,paginationConf.itemsPerPage)">
+										<i class="glyphicon glyphicon-search"></i>
+									</button>
+								</div>
+							</div>
+							<div style="clear: both;"></div>
+							<div class="table-responsive" style="margin-left: 15px;"
+								id="list-view">
+								<table class="table table-bordered">
+									<thead>
+										<tr class="tr-height">
+											<th>状态</th>
+											<th>时间</th>
+											<th>数值</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="x in Hisdatas" class="tr-height">
+											<td><span ng-switch="{{x.state}}"><i
+													name="his_data_state" ng-switch-when="0"
+													class="fa  fa-circle" style="color: gray;"
+													data-toggle="tooltip" title="离线"></i><i
+													name="his_data_state" ng-switch-when="1"
+													class="fa  fa-circle" style="color: green;"
+													data-toggle="tooltip" title="在线"></i><i
+													name="his_data_state" ng-switch-when="2"
+													class="fa  fa-circle" style="color: red;"
+													data-toggle="tooltip" title="超时"></i> <i
+													name="his_data_state" ng-switch-default
+													class="fa  fa-circle" style="color: red;"
+													data-toggle="tooltip" title="超时"></i></span></td>
+											<td>{{x.monitor_time|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+											<td>{{x.value}}</td>
+
+
+										</tr>
+									</tbody>
+								</table>
+								<tm-pagination conf="paginationConf"></tm-pagination>
+							</div>
+							<div id="curves-view" style="display: none;">
+								<div id="original-graph-container"
+									style="min-width: 400px; height: 400px; margin-top: 40px;"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 数据登记 -->
+		<div role="tabpanel" class="tab-pane" id="data-record">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-content" style="padding-left: 20px;">
+							<div class="row ibox-solid">
+								<span>
+									<button type="button" class="btn btn-primary"
+										data-toggle="modal" data-target="#dataRecord"
+										style="margin-right: 15px; margin-left: 15px;"
+										ng-click="addmonitor();">
+										<span class="glyphicon glyphicon-pencil"></span>&nbsp;数据登记
+									</button>
+								</span>
+							</div>
+							<div class="table-responsive">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th>编码</th>
+											<th>名称</th>
+											<th>周期(秒)</th>
+											<th>连接设备</th>
+											<th>数据类型</th>
+											<th>地址类型</th>
+											<th>单位</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="x in hisConfs">
+											<td><span ng-if="x.state==1"><i
+													name="his_i_state" class="fa  fa-circle"
+													style="color: orange;" data-toggle="tooltip" title="条目未下发"></i></span>
+												<span ng-if="x.state==2"><i name="his_i_state"
+													class="fa  fa-circle" style="color: orange;"
+													data-toggle="tooltip" title="条目未下发"></i></span> <span
+												ng-if="x.state<0 || x.state>2"><i name="his_i_state"
+													class="fa  fa-circle" style="color: black;"
+													data-toggle="tooltip"
+													title="{{x.state==-1?'编译失败':(x.state==-2?'地址转义失败':(x.state==-3?'地址绑定失败':'未知状态'))}}"></i></span>
+												{{x.id}}</td>
+											<td>{{x.name}}</td>
+											<td>{{x.his_cycle}}</td>
+											<td>{{x.condevice}}</td>
+											<td>{{x.data_value}}</td>
+											<td>{{x.rid}}</td>
+											<td>{{x.ext_unit}}</td>
+
+											<td><a href="#" title="编辑" data-toggle="modal"
+												data-target="#dataRecord" ng-cloak ng-if="accounttype==1"
+												ng-click="editmonitor(x);"> <span
+													class="glyphicon glyphicon-edit"
+													style="font-size: 16px; color: #32a696; margin: 10px;"></span>
+													编辑
+											</a> <a href="#" title="删除" data-toggle="modal"
+												data-target="#deletehispoint" ng-click="delmonitor(x);">
+													<span class="glyphicon glyphicon-trash"
+													style="font-size: 16px; color: #32a696; margin: 10px;"></span>
+													删除
+											</a></td>
+										</tr>
+									</tbody>
+								</table>
+								<tm-pagination conf="paginationConf_register"></tm-pagination>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 数据登记 -->
+	<div class="modal inmodal fade" id="dataRecord" tabindex="-1"
+		role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content animated">
+				<div class="modal-header" style="padding: 15px 10px;">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h5 class="modal-title">{{showtype==0?"数据登记":"编辑数据"}}</h5>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="tabs-container">
+								<div class="tab-content">
+									<div id="tab-1" class="tab-pane active">
+										<form method="post" class="form-horizontal" name="" id=""
+											action="">
+											<div class="form-group row col-md-12">
+												<label class="col-md-3 control-label">名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称</label>
+												<div class="col-md-9">
+													<input class="form-control" type="text" name="nameid"
+														id="nameid" placeholder="请输入少于50位的字符" maxlength="50">
+												</div>
+											</div>
+											<div class="form-group row col-md-12">
+												<label class="col-md-3 control-label">连接设备</label>
+												<div class="col-md-9">
+													<select class="form-control" id="conid">
+														<option ng-repeat="x in infoDatas" value="{{x.plcId}}">{{$index+1}}-{{x.port}}</option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group row col-md-12">
+												<label class="col-md-3 control-label">地址类型</label>
+												<div class="col-md-3">
+													<select class="form-control" id="addrtypeid">
+														<option ng-repeat="x in allAddrs" value="{{x.addrkey}}">{{x.addrkey==0?"位地址":x.addrkey==1?"字节地址":x.addrkey==2?"字地址":"双字"}}</option>
+
+													</select>
+												</div>
+												<label class="col-md-3 control-label">寄存器类型</label>
+												<div class="col-md-3">
+													<select id="registerid" class="form-control">
+														<option ng-repeat="x in addrvalues"
+															value="{{x.addrvalue}}">{{x.addrvalue}}</option>
+
+													</select>
+												</div>
+											</div>
+											<div class="form-group row col-md-12" id="registeraddr">
+												<label class="col-md-3 control-label">寄存器地址<br />(主编号)
+												</label>
+												<div class="col-md-3">
+													<input id="addrid" type="text" class="form-control" />
+												</div>
+												<label class="col-md-5 control-label">主编号:<lable
+														id="rangid"></lable> <lable>(</lable> <lable id="scaleid"></lable>
+													<lable>)</label></label>
+
+											</div>
+											<div class="form-group row col-md-12" id="child_registeraddr">
+												<label class="col-md-3 control-label">寄存器地址<br />(子编号)
+												</label>
+												<div class="col-md-3">
+													<input id="child_addrid" type="text" class="form-control" />
+												</div>
+												<label class="col-md-5 control-label">字编号:<lable
+														id="child_rangid"></lable> <lable>(</lable> <lable
+														id="child_scaleid"></lable> <lable>)</label></label>
+
+											</div>
+											<div class="form-group row col-md-12" id="div_unit">
+												<label class="col-md-3 control-label">单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位</label>
+												<div class="col-md-9">
+													<input class="form-control" type="text" name="unitid"
+														id="unitid" placeholder="请输入少于20位的字符" maxlength="20">
+												</div>
+											</div>
+											<div class="form-group row col-md-12" id="divdatatypeid">
+												<label class="col-md-3 control-label">数据格式</label>
+												<div class="col-md-9">
+													<select class="form-control" id="datatypeid">
+														<option ng-repeat="x in dataTypes" value="{{x.value}}"
+															ng-if="x.value!=400&&x.value!=401&&x.value!=402&&x.value!=403&&x.value!=404&&x.value!=405">{{x.text}}</option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group row col-md-12" id="datadigitid">
+												<label class="col-md-3 control-label">整数位数</label>
+												<div class="col-md-3">
+													<input class="form-control" type="text" id="dataid">
+												</div>
+												<label class="col-md-3 control-label">小数位数</label>
+												<div class="col-md-3">
+													<input class="form-control" type="text" id="decid">
+												</div>
+											</div>
+											<div class="form-group row col-md-12" id="div_stringid">
+
+												<label class="col-md-3 control-label">操作字符</label>
+												<div class="col-md-3">
+													<input id="stringid" type="text" class="form-control" />
+												</div>
+												<label class="col-md-5 control-label">个&nbsp;(1~256)</label>
+
+											</div>
+											<div class="form-group row col-md-12">
+												<label class="col-md-3 control-label">历史数据采集<br />周期(秒)
+												</label>
+												<div class="col-md-9">
+													<input class="form-control" type="number" name="hiscycleid"
+														id="hiscycleid" min="1" max="86400" value="60">
+												</div>
+											</div>
+											<div class="form-group row col-md-12">
+												<label class="col-md-3 control-label">描述</label>
+												<div class="col-md-9">
+													<input class="form-control" type="text" name="describeid"
+														id="describeid" placeholder="请输入少于50位的字符" maxlength="50">
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary"
+						ng-click="saveupmonitor()">确定</button>
+					<button type="button" class="btn btn-white closeModal"
+						data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="../lib/bootstrap/js/bootstrap.min.js?v=3.3.6"></script>
+	<script src="../lib/sweetalert.min.js"></script>
+	<script src="../lib/laydate/laydate.js"></script>
+	<!-- 改成你的路径 -->
+	<script src="../lib/wecon-common.js" type="text/javascript"></script>
+	<script src="../lib/angular/angular.min.js" type="text/javascript"></script>
+	<script src="../lib/hightcharts/highcharts.js"></script>
+	<script src="../lib/hightcharts/exporting.js"></script>
+	<script src="../js/historydata.js?v=1" type="text/javascript"></script>
+	<script src="../lib/pagination.js" type="text/javascript"></script>
+
+	<script>
+		laydate.render({
+			elem : '#startdateid',
+			type : 'datetime'
+		});
+		laydate.render({
+			elem : '#enddateid',
+			type : 'datetime'
+		});
+	</script>
+
+</body>
+
+</html>

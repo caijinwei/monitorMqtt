@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="weconweb">
+<head>
+    <meta charset="UTF-8">
+    <title>user profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../css/style.css"/>
+    <link rel="stylesheet" href="../../lib/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../lib/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body ng-controller="infoController" ng-init="onInit()">
+<div class="container">
+    <ol class="breadcrumb" style="margin-top: 40px;">
+        <li><a href="../overview.html">主页</a></li>
+        <li class="active">账户信息</li>
+    </ol>
+    <div class="row" style="margin-top: 40px;">
+        <div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div class="btn-group" style="float: right;">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-cog"></span> 操作
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#" data-toggle="modal" data-target="#updateEmail">绑定/更换邮箱</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#updatePhoneNum">绑定/更换手机</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#updatePwd">修改密码</a></li>
+                        </ul>
+                    </div>
+                    <h4>个人信息</h4>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <tr>
+                            <td width="30%">用户名：</td>
+                            <td>{{userInfo.username}}</td>
+                        </tr>
+                        <tr>
+                            <td>邮箱：</td>
+                            <td>{{userInfo.email}}</td>
+                        </tr>
+                        <tr>
+                            <td>手机：</td>
+                            <td>{{userInfo.phonenum}}</td>
+                        </tr>
+                        <tr>
+                            <td>密码：</td>
+                            <td>********</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel panel-info" ng-if="userInfo.type==1">
+                <div class="panel-heading">
+                    <div class="btn-group" style="float: right;">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-cog"></span> 操作
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#" data-toggle="modal" data-target="#updateCompany">编辑公司信息</a></li>
+                        </ul>
+                    </div>
+                    <h4>公司信息</h4>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <tr>
+                            <td width="30%">公司名：</td>
+                            <td>{{userExt.company}}</td>
+                        </tr>
+                        <tr>
+                            <td>公司主业：</td>
+                            <td>{{userExt.company_business}}</td>
+                        </tr>
+                        <tr>
+                            <td>联系人：</td>
+                            <td>{{userExt.company_contact}}</td>
+                        </tr>
+                        <tr>
+                            <td>联系电话：</td>
+                            <td>{{userExt.company_phone}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--绑定邮箱-->
+    <div class="modal" id="updateEmail" tabindex="-1" data-backdrop="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">绑定/更换邮箱</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="form-group">
+                                <i class="fa fa-envelope-o fa-lg icon"></i>
+                                <input type="text" class="form-control" placeholder="请输入要绑定/更换的邮箱" id="newemail"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" ng-click="chgemail();">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--更换手机-->
+    <div class="modal" id="updatePhoneNum" tabindex="-1" data-backdrop="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">绑定/更换手机</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="form-group">
+                                <i class="fa fa-mobile fa-lg icon"></i>
+                                <input type="text" class="form-control" placeholder="请输入要绑定/更换的手机号" id="newphone"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <!--<span class="input-group-addon"><i class="fa fa-mobile fa-lg vercode"></i></span>-->
+                                    <input type="text" class="form-control" placeholder="验证码" id="vercode"/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-info" id="sendsms" ng-click="sendsms();">点击发送
+                                </button>
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" ng-click="chgphone();">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--修改密码-->
+    <div class="modal" id="updatePwd" tabindex="-1" data-backdrop="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">修改密码</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="form-group">
+                                <i class="fa fa-lock fa-lg icon"></i>
+                                <input type="password" class="form-control" placeholder="旧密码" id="oldpwd"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <i class="fa fa-lock fa-lg icon"></i>
+                                <input type="password" class="form-control" placeholder="新密码" id="newpwd"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <i class="fa fa-lock fa-lg icon"></i>
+                                <input type="password" class="form-control" placeholder="再次输入新密码" id="newpwdconfirm"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" ng-click="chgpwd();">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--修改公司信息-->
+    <div class="modal" id="updateCompany" tabindex="-1" data-backdrop="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    <h4 class="modal-title">编辑公司信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="公司名" value="{{userExt.company}}" id="company" maxlength="32" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="公司主业" value="{{userExt.company_business}}" id="company_business" maxlength="32" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="联系人" value="{{userExt.company_contact}}" id="company_contact" maxlength="16" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="联系电话" value="{{userExt.company_phone}}" id="company_phone" maxlength="16" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" ng-click="chgcompany();">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../lib/jquery/jquery-3.2.1.min.js"></script>
+<script src="../../lib/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../../lib/angular/angular.min.js" type="text/javascript"></script>
+<script src="../../lib/wecon-common.js" type="text/javascript"></script>
+<script src="../../js/user/info.js" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+package com.wecon.restful.core;
+
+option java_package = "com.wecon.restful.core";
+
+option java_outer_classname = "SessionState";
+
+message UserInfo {
+    required int64 userID = 1;
+    required string cuid = 2; //登录设备的CUID
+    required int32 productId = 3; //客户端应用ID
+    required int64 loginTime = 4; //登录时间
+    optional int64 loginIp = 5; //登录IP
+    optional string account = 6; //帐号
+	required int32 userType = 7; //用户类型
+}

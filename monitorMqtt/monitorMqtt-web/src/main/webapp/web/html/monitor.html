@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>监控mqtt</title>
+    <!-- Bootstrap -->
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="../lib/mqtt/html5shiv.min.js"></script>
+    <script src="../lib/mqtt/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="container">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">MQTT</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-inline" role="form">
+                <div class="form-group">
+
+
+                    <!--<input id="pub_channel" type="text" class="form-control" placeholder="频道">-->
+                    <!--<input id="pub_message" type="text" class="form-control" placeholder="内容">-->
+
+                    <span>服务器</span>
+                    <select class="form-control">
+                        <option value="intranet">mqtt内网</option>
+                        <option value="extranet">mqqt外网</option>
+                        <option value="testnet">mqtt测试服务器</option>
+                    </select>
+
+                    <span>监控项目：</span>
+                    <select class="form-control" id="monitor_project">
+                        <option name="monitor_project" value="runningMqtt">mqtt运行</option>
+                        <option name="monitor_project" value="connectNum">mqtt连接数</option>
+                    </select>
+
+                    <input class="form-control" placeholder="推送人"/>
+
+                    <input class="form-control" type="button" value="详细配置" onclick="alarmModalShow()"/>
+                    <input  style="margin-left: 40px" type="button" onclick="monitor_mqtt()" class="btn btn-success" value="开启监听"/>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div><!-- /.container -->
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="alarmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">报警参数设置</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="panel panel-default" id="maxConnect">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">连接数峰值：</h3>
+                    </div>
+                    <div class="panel-body">
+                        <span class="col-md-6">连接数报警峰值：</span>
+                        <input class="col-md-6"/>
+                    </div>
+                </div>
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">邮箱</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="emainWrapper">
+                            <div>
+                                <input class="form-control" name="emainInputs" placeholder="邮箱"/>
+                            </div>
+                        </div>
+                        <hr>
+                        <button id="addEmail_btn" type="button" class="btn btn-default"
+                                onclick="addEmain_btn()"><span
+                                style="font-size: medium">+</span></button>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">手机号</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="phoneWrapper">
+                            <div>
+                                <input class="form-control"  name="phoneInputs" placeholder="手机号"/>
+                            </div>
+                        </div>
+                        <hr>
+                        <div>
+                            <button id="addPhone_btn" type="button" onclick="addPhone_btn()" class="btn btn-default"><span
+                                    style="font-size: medium">+</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="../lib/mqtt/mqttws31.js"></script>
+<script src="../lib/wecon-common.js"></script>
+<script src="../js/monitor.js"></script>
+</body>
+</html>

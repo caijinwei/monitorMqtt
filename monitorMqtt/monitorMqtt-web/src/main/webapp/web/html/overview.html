@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="weconweb">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="stylesheet" type="text/css" href="../lib/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/animate.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <!--低版本浏览器识别HTML5标签-->
+    <!--低版本浏览器支持CSS媒体查询-->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv/html5shiv-printshiv.min.js"></script>
+    <script type="text/javascript" src="lib/respond/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="gray-bg" ng-controller="listController" ng-init="onInit()">
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <i class="pull-left fa fa-forward"></i>
+                    <h5>当前报警条目</h5>
+                </div>
+                <div class="ibox-content" style="height: 70px;">
+                    <h1 class="no-margins color-red" ng-bind="boxInfo.nowalarm"></h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <i class="pull-left fa fa-forward"></i>
+                    <h5>当前报警盒子数</h5>
+                </div>
+                <div class="ibox-content" style="height: 70px;">
+                    <h1 class="no-margins color-orange" ng-bind="boxInfo.alarmbox"></h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <i class="pull-left fa fa-forward"></i>
+                    <h5>在线盒子数</h5>
+                </div>
+                <div class="ibox-content" style="height: 70px;">
+                    <h1 class="no-margins  color-darkViolet" ng-bind="boxInfo.onlinebox"></h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <i class="pull-left fa fa-forward"></i>
+                    <h5>总盒子数</h5>
+                </div>
+                <div class="ibox-content" style="height: 70px;">
+                    <h1 class="no-margins  color-darkTurquoise" ng-bind="boxInfo.allbox"></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <iframe id="myiframe" class="J_iframe" name="iframe" style="min-height:700px" width="100%" height="100%" onload="iframeLoad()" src="box-map-test.html" frameborder="0" data-id="box-map.html" seamless>
+            </iframe>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="../lib/angular/angular.min.js" type="text/javascript"></script>
+<script src="../lib/wecon-common.js" type="text/javascript"></script>
+<script src="../js/overview.js" type="text/javascript"></script>
+<script>
+    function iframeLoad()
+    {
+        document.getElementById("myiframe").height=0;
+        document.getElementById("myiframe").height=document.getElementById("myiframe").contentWindow.document.body.scrollHeight;
+    }
+</script>
+</body>
+</html>

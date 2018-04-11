@@ -1,0 +1,11 @@
+com\wecon\common\test\FwVersionHelperTest.class
+com\wecon\common\test\IpAddrHelperTest.class
+com\wecon\common\test\VersionTest.class
+com\wecon\common\test\ImageUrlHelperTest.class
+com\wecon\common\test\EnumUtilTest.class
+com\wecon\common\test\PhoneCodeUtilTest.class
+com\wecon\common\test\WebHelperTest.class
+com\wecon\common\test\TestCacheLoader.class
+com\wecon\common\test\TimeUtilTest.class
+com\wecon\common\test\CommonOptionUtilTest.class
+com\wecon\common\test\XmlUtilTest.class

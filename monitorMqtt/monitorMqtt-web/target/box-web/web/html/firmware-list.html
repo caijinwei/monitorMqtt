@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="weconweb">
+<head>
+    <meta charset="UTF-8">
+    <title>固件管理列表</title>
+    <link rel="stylesheet" href="../lib/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/page.css"/>
+</head>
+<body ng-controller="listController" ng-init="onInit()" style="margin-top: 20px;">
+<ol class="breadcrumb">
+    <li><a href="overview.html">主页</a></li>
+    <li class="active">固件管理列表</li>
+</ol>
+<div class="container-fluid">
+    <div id="search-div" class="container-fluid search-div">
+        <div class="row form-horizontal">
+            <div class="col-xs-4 col-sm-4 col-md-4 form-group">
+                <label class="col-sm-4 control-label" for="dev_model">设备型号</label>
+
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="dev_model" placeholder="设备型号">
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 form-group">
+                <label class="col-sm-4 control-label" for="firm_info">名称</label>
+
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="firm_info" placeholder="名称">
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 form-group">
+                <label class="col-sm-4 control-label"></label>
+
+                <div class="col-sm-8">
+                </div>
+            </div>
+        </div>
+        <div>
+            <button type="button" class="btn btn-primary"
+                    ng-click="getList(paginationConf.currentPage, paginationConf.itemsPerPage)">查询
+            </button>
+            <button type="button" class="btn btn-primary" ng-click="addNew()">新增</button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-condensed">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>设备型号</th>
+                <th>名称</th>
+                <th>版本号</th>
+                <th>版本名称</th>
+                <th>创建时间</th>
+                <th>更新时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="x in pushlist" change-color>
+                <td>{{x.firmware_id}}</td>
+                <td>{{x.dev_model}}</td>
+                <td>
+                    {{x.firm_info}}
+                </td>
+                <td>{{x.version_code}}</td>
+                <td>{{x.version_name}}</td>
+                <td>{{x.create_date|date:'yyyy-MM-dd HH:mm'}}</td>
+                <td>{{x.update_date|date:'yyyy-MM-dd HH:mm'}}</td>
+                <td>
+                    <button class="btn btn-default btn-xs glyphicon glyphicon-pencil"
+                            ng-click="methods.edit(x)">编辑
+                    </button>
+                    <button class="btn btn-default btn-xs glyphicon glyphicon-remove"
+                            ng-click="methods.delete(x)">删除
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <tm-pagination conf="paginationConf"></tm-pagination>
+    </div>
+
+    <!--弹出蒙版-->
+    <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document" style="margin-top: 350px;text-align: center">
+            <img src="../image/loading.jpg"/>
+        </div>
+    </div>
+</div>
+<script src="../lib/jquery/jquery-3.2.1.min.js"></script>
+<script src="../lib/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../lib/angular/angular.min.js" type="text/javascript"></script>
+<script src="../lib/wecon-common.js" type="text/javascript"></script>
+<script src="../js/firmware-list.js?v=1" type="text/javascript"></script>
+<script src="../lib/pagination.js" type="text/javascript"></script>
+</body>
+</html>

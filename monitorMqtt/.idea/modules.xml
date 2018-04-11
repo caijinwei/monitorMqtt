@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/monitorMqtt.iml" filepath="$PROJECT_DIR$/monitorMqtt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/monitorMqtt-api/monitorMqtt-api.iml" filepath="$PROJECT_DIR$/monitorMqtt-api/monitorMqtt-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/monitorMqtt-context/monitorMqtt-context.iml" filepath="$PROJECT_DIR$/monitorMqtt-context/monitorMqtt-context.iml" />
+      <module fileurl="file://$PROJECT_DIR$/monitorMqtt-impl/monitorMqtt-impl.iml" filepath="$PROJECT_DIR$/monitorMqtt-impl/monitorMqtt-impl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/monitorMqtt-test/monitorMqtt-test.iml" filepath="$PROJECT_DIR$/monitorMqtt-test/monitorMqtt-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/monitorMqtt-web/monitorMqtt-web.iml" filepath="$PROJECT_DIR$/monitorMqtt-web/monitorMqtt-web.iml" />
+    </modules>
+  </component>
+</project>

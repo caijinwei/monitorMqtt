@@ -1,0 +1,292 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html ng-app="weconweb">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="../lib/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="../lib/base.css" rel="stylesheet">
+    <link href="../lib/loader.css" rel="stylesheet">
+    <style>
+        #allmap{
+            width: 100%;
+            height:100%;
+        }
+        .btn{
+            height:34px;
+        }
+        label.BMapLabel{
+            border:none;
+        }
+        #searchbox{
+            width:200px;
+            height:34px;
+            background:white;
+            border-radius:5px;
+        }
+
+        #searchResultPanel{
+            border:none;
+
+        }
+        #searchResultPanel ul{
+            background: white;
+            margin-bottom: 0px;
+            padding-left: 0px;
+        }
+        #searchResultPanel ul li{
+            list-style: none;
+            padding-left: 10px;
+            text-align: left;
+            height:35px;
+            line-height:35px;
+            font-size:15px;
+            color:#969696;
+            font-weight: "Microsoft Yahei";
+        }
+        #searchResultPanel ul li:hover{
+            background: rgba(176,176,176,0.3);
+            cursor:pointer;
+            color:black;
+        }
+        #searchResultPanel ul li span{
+            display: inline-block;
+            margin-left: 15px;
+        }
+        #searchResultPanel ul li span#position{
+            display: none;
+        }
+        .boxInfo{
+            font-size:15px;
+            margin-bottom:5px;
+        }
+        /*.btn-redirect{*/
+            /*background: none;*/
+            /*border: 1px solid white;*/
+            /*margin-right:10px;*/
+            /*border-radius:15px;*/
+            /*padding:5px;*/
+            /*color: #1c43b7;*/
+        /*}*/
+        /*.btn-redirect:hover{*/
+            /*border: 1px solid #DEDEDE;*/
+            /*background: #DEDEDE;*/
+            /*color:black;*/
+            /*text-decoration: underline;*/
+        /*}*/
+        select.devicetype{
+            width: 150px;
+            position: absolute;
+            top: 0px;
+            left: 220px;
+        }
+    </style>
+</head>
+<body ng-controller="infoController">
+<!--<div id="loader-wrapper">-->
+    <!--<div id="loader"></div>-->
+    <!--<div class="loader-section section-left"></div>-->
+    <!--<div class="loader-section section-right"></div>-->
+    <!--<div class="load_title" style="color:black">正在加载地图....</div>-->
+<!--</div>-->
+<div id="allmap">
+</div>
+<script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../lib/angular/angular.min.js" type="text/javascript"></script>
+<!--<script src="../lib/sockjs/sockjs.min.js" type="text/javascript"></script>-->
+<script src="../lib/wecon-common.js" type="text/javascript"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=22nCxldLGEbsQ3gXBNTwhF4Te4UDzECE"></script>
+<script src="../js/box-map-test.js" type="text/javascript"></script>
+<script>
+
+
+/*
+    var map = new BMap.Map("allmap");  // 创建Map实例
+    //		map.centerAndZoom("福州",15);      // 初始化地图,用城市名设置地图中心点
+    var point = new BMap.Point(119.25259,26.105791);  // 创建点坐标
+    map.centerAndZoom(point, 18);
+
+    //		var myIcon = new BMap.Icon("../img/biaozhured.png", new BMap.Size(20,33));
+    //		var marker = new BMap.Marker(point,{icon:myIcon});  // 创建标注
+    //		map.addOverlay(marker);              // 将标注添加到地图中
+    //		marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+    //		marker.enableDragging(true);//开启可拖动
+
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
+    //显示定位
+    var navigationControl = new BMap.NavigationControl({
+        // 靠右上角位置
+        anchor: BMAP_ANCHOR_TOP_RIGHT,
+        // LARGE类型
+        type: BMAP_NAVIGATION_CONTROL_LARGE,
+        // 启用显示定位
+        enableGeolocation: true
+    });
+    map.addControl(navigationControl);
+
+
+    //鼠标点击获取坐标
+    map.addEventListener("click",function(e){
+        console.log(e.point.lng + "," + e.point.lat);
+    });
+
+
+    //文字信息描述
+
+
+    //添加自定义搜索框控件
+    // 定义一个控件类,即function
+
+    //模拟加载点
+    $(function(){
+        var boxdata = "";
+        $.ajax({
+            method:"get",
+            url:"../lib/boxposition.txt",
+            dataType:"json",
+            scriptCharset: 'utf-8',
+            success:function(data){
+                boxdata = data.data;
+                var myIconRed = new BMap.Icon("../img/biaozhu3Dred.png", new BMap.Size(23,33)); //红色标注
+                var myIconGreen = new BMap.Icon("../img/biaozhu3Dgreen.png", new BMap.Size(23,33));
+                var myIconGrey = new BMap.Icon("../img/biaozhu3Dgrey.png", new BMap.Size(23,33));
+                for(i = 0; i < boxdata.length;i++){
+                    var point = new BMap.Point(boxdata[i].lng,boxdata[i].lat);  // 创建点坐标
+                    if(boxdata[i].status == "on"){
+                        var marker = new BMap.Marker(point,{icon:myIconGreen})// 创建标注
+                        marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                    }
+                    else{
+                        var marker = new BMap.Marker(point,{icon:myIconGrey});  // 创建标注
+                    }
+
+                    map.addOverlay(marker);              // 将标注添加到地图中
+
+                    marker.enableDragging(true);//开启可拖动
+
+                    //文字描述信息
+                    var sContent =
+                        "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>富昌维控</h4>" +
+                        "<img style='float:right;margin:4px' id='imgDemo' src='../img/wecon.png' width='139' height='104' title='天安门'/>" +
+                        "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>维控坐落在中国福州市中心,故宫的南侧,与天安门广场隔长安街相望,是清朝皇城的大门...</p>" +
+                        "<button onclick='javascript:window.top.redirect(\"http://localhost:8080/box-web/webref/html/boxtitle.html\")'>跳转</button>"+"</div>";
+                    var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
+                    //坐标标注点点击事件
+                    marker.addEventListener("click", function(){
+                        this.openInfoWindow(infoWindow);
+                        //图片加载完毕重绘infowindow
+                        document.getElementById('imgDemo').onload = function (){
+                            infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
+                        }
+                    });
+
+                    //标注文字信息
+                    var label = new BMap.Label(boxdata[i].name,{offset:new BMap.Size(25,-10)});
+                    label.setStyle({
+                        fontSize: "14px",
+                        backgroundColor: "white",
+                        position:"relative",
+                        border:"0",
+                        padding:"5px",
+                    });
+                    //label点击事件,不能用,因为没有this属性
+//					    label.addEventListener("click", function(){
+//						    map.openInfoWindow(infoWindow,point);   //提示信息
+//						});
+                    marker.setLabel(label);
+                }
+            },
+            error:function(){
+                alert("error");
+            }
+        });
+
+        //搜索框的数据改变事件
+        $('#boxid').bind('input propertychange', function() {
+            $("#searchResultPanel").css("display","block");
+            var searchResultPanel = document.getElementById("searchResultPanel");
+            strHTML = "";
+            for(i = 0; i < boxdata.length; i++){
+                if($(this).val() != "" && boxdata[i].name.indexOf($(this).val())>-1){
+                    strHTML += "<li class='searchitem'><i class='glyphicon glyphicon-search'></i><span>"+boxdata[i].name+"</span></li>";
+                }
+            }
+            searchResultPanel.innerHTML = "<ul>"+strHTML+"</ul>";
+        });
+
+        //点击搜索框列表的事件
+        $(document).on("click","#searchResultPanel ul li.searchitem", function() {
+            var searchtext =  $(this).text();
+            locationonfocus(searchtext);
+            $("#searchResultPanel").css("display","none");
+            $('#boxid').val("");
+        })
+
+        //点击搜索按钮触发的事件
+        search = function(){
+            var name = $('#boxid').val();
+            locationonfocus(name,"btn");
+        }
+
+        //搜索点
+        function locationonfocus(name,type){
+            for(i = 0; i < boxdata.length; i++){
+                if(type == "btn"){
+                    if(boxdata[i].name == name){
+                        $("#searchResultPanel").css("display","none");
+                        $('#boxid').val("");
+                        moveCenter(boxdata[i].lng,boxdata[i].lat);
+                        break;
+                    }
+                }
+                else{
+                    if(boxdata[i].name.indexOf(name)>-1){
+                        moveCenter(boxdata[i].lng,boxdata[i].lat);
+                        break;
+                    }
+                }
+            }
+            if(i == boxdata.length){
+                alert("未找到您搜索的盒子");
+            }
+        }
+
+        //移动中心点
+        function moveCenter(lng,lat){
+            var new_point = new BMap.Point(lng,lat);  // 创建点坐标
+            map.panTo(new_point);
+        }
+    });//jq初始化函数结束
+
+
+
+
+
+
+
+    //修改主题功能
+    changeMapStyle('grassgreen');
+    function changeMapStyle(style){
+        map.setMapStyle({style:style});
+    }
+
+    //切换城市功能
+    var size = new BMap.Size(10, 20);
+    map.addControl(new BMap.CityListControl({
+        anchor: BMAP_ANCHOR_TOP_LEFT,
+        offset: size,
+        // 切换城市之间事件
+        // onChangeBefore: function(){
+        //    alert('before');
+        // },
+        // 切换城市之后事件
+        // onChangeAfter:function(){
+        //   alert('after');
+        // }
+    }));
+
+   */
+</script>
+</body>
+</html>
