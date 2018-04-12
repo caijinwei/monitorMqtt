@@ -6,6 +6,9 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
     $scope.onInit = function () {
         //T.common.user.checkAuth();
         $scope.type = 1;
+
+        $("#ifmain").attr('src', 'web/html/overview.html');
+
     }
 
 

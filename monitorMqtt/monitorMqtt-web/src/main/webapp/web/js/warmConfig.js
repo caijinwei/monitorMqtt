@@ -6,8 +6,7 @@ appModule.controller("listController", function ($scope, $http, $compile) {
     $scope.onInit = function () {
         $("#loadingModal").modal("show");
 
-        $scope.serverId = T.common.util.getParameter("serverId");
-        console.log("获取得到serverId的值   " + $scope.serverId);
+        $scope.serverId = T.common.util.getParameter("server_id");
         $scope.showServerNotification($scope.serverId);
 
         $("#loadingModal").modal("hide");
