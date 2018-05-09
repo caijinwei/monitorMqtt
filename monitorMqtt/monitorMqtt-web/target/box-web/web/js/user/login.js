@@ -1,7 +1,8 @@
 /**
- * Created by zengzhipeng on 2017/8/2.
+ * Created by zengzhipeng on 2018/1/23.
  */
 $(function () {
+    $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
     T.common.user.checkAuth();
     $("#login").bind('click', function () {
         $("#loadingModal").modal("show");
@@ -25,7 +26,7 @@ $(function () {
             $("#loadingModal").modal("hide");
             if (code == 200) {
                 T.common.user.setSid(data.sid);
-                location = "../../../main.html";
+                location = "../../../index.html";
             }
             else {
                 alert( msg);

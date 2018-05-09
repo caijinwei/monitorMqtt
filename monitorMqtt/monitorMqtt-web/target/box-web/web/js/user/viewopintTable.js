@@ -66,7 +66,7 @@ appModule.controller("listController", function ($scope, $http, $compile) {
                 $scope.$apply();
             }
             else {
-                alert(code + "-" + msg);
+                swal("code + "-" + msg","","error");
             }
         }, function () {
             console.log("ajax error");
@@ -95,7 +95,7 @@ appModule.controller("listController", function ($scope, $http, $compile) {
                 $scope.$apply();
             }
             else {
-                alert(code + "-" + msg);
+                swal("code + "-" + msg","","error");
             }
         }, function () {
             console.log("ajax error");
@@ -112,7 +112,8 @@ appModule.controller("listController", function ($scope, $http, $compile) {
                 $scope.$apply();
             }
             else {
-                alert(code + "-" + msg);
+                swal("code + "-" + msg","","error");
+
             }
         }, function () {
             console.log("ajax error");

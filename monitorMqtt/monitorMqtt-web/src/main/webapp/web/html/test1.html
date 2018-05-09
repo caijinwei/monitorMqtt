@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table style="width: 100%;height: 100%">
+    <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+    <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+    <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+    <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+    <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+    <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+</table>
+</body>
+<script type="application/javascript">
+    $('#reportTable1').bootstrapTable({
+        method: 'get',
+        editable:true,//开启编辑模式
+        clickToSelect: true,
+        columns: [
+            {field:"user_email",edit:false,title:"email",align:"center"},
+            {field:"user_company",edit:{
+                type:'select',//下拉框，如果是下拉则需要设置type为select
+                //url:'user/getUser.htm',//从服务器加载
+                data:[{id:1,text:'lzx'},{id:2,text:'lsl'}],
+                valueField:'id',
+                textField:'text',
+                onSelect:function(val,rec){
+                    console.log(val,rec);
+                }
+            },title:"company",align:"center",width:"200px"},
+            {field:"user_dates",edit:{
+                type:'date'//日期
+            },title:"date",align:"center"},
+            {field:"user_version",title:"version",align:"center",
+                edit:{
+                    required:true,
+                    click:function(){
+                    }
+                }
+            },
+            {field:"user_isv2",title:"isv2",align:"center"},
+            {field:"userstatus_usertype",title:"usertype",align:"center"},
+            {field:"userstatus_package_id",title:"package_id",align:"center"},
+            {field:"userstatus_end_time",title:"end_time",align:"center",formatter:function(value,row,rowIndex){
+                var strHtml = '<a href="javascript:void(0);" onclick="removeRow('+rowIndex+')">删除</a>';
+                return strHtml;
+            },edit:false},
+            {field:"user_lastlogintime",title:"lastlogintime",align:"center",valign:'middle'}
+        ],
+        data : []
+    });
+
+</script>
+</html>

@@ -11,6 +11,8 @@
     <link rel="stylesheet" type="text/css" href="../lib/base.css"/>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
     <link rel="stylesheet" type="text/css" href="../css/page.css"/>
+    <link href="../lib/loader.css" rel="stylesheet">
+
     <!--低版本浏览器识别HTML5标签-->
     <!--低版本浏览器支持CSS媒体查询-->
     <!--[if lt IE 9]>
@@ -44,6 +46,12 @@
 </head>
 
 <body ng-controller="listController" ng-init="onInit()">
+<div id="loader-wrapper">
+    <div id="loader"></div>
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+    <div class="load_title">正在加载....</div>
+</div>
 <div class="container" style="padding-top: 40px;width:100%;">
     <div class="row">
         <div class="col-sm-12" style="margin: 0 auto;">
@@ -115,7 +123,7 @@
                                         当plc_id为默认值0时候  就是新增用户
                                         当plc_id为非0数值时候  就是修改改plc_id的内容
                                          -->
-                                        <input disabled  id="notificationIdInput" value="0" />
+                                        <input type="hidden"  id="notificationIdInput" value="0" />
                                         <div class="form-group col-md-6">
                                             <label class="col-sm-4 control-label">通知方式</label>
 
@@ -162,7 +170,7 @@
                                                    style="padding-right: 20px;">号码</label>
 
                                             <div class="col-sm-9">
-                                                <input class="form-control" type="number"
+                                                <input class="form-control"
                                                        id="notificationNumber" />
                                             </div>
                                         </div>

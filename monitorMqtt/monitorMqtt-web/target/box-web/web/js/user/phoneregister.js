@@ -2,6 +2,8 @@
  * Created by zengzhipeng on 2017/8/15.
  */
 $(function () {
+    $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",});
+
     T.common.user.checkAuth(2);
 
     var countdown = 60;
@@ -30,17 +32,22 @@ $(function () {
             phonenum: $('#phonenum').val().trim()
         };
         if (params.phonenum == '') {
-            alert("请输入手机号码");
+            swal({
+                title: "请输入手机号码",
+                icon: "warning"
+            });
             return;
         }
         $btn.setAttribute("disabled", true);
         T.common.ajax.request("WeconBox", "user/sendvercode", params, function (data, code, msg) {
-            $("#loadingModal").modal("hide");
             if (code == 200) {
                 settime($btn);
             }
             else {
-                alert(msg);
+                swal({
+                    title: msg,
+                    icon: "error"
+                });
                 $btn.removeAttribute("disabled");
             }
         }, function () {
@@ -51,10 +58,12 @@ $(function () {
 
     $('#signup').bind('click', function () {
         if (!$('#cbRegister').is(':checked')) {
-            alert("请阅读并接受注册条款");
+            swal({
+                title: "请阅读并接受注册条款",
+                icon: "warning"
+            });
             return;
         }
-        $("#loadingModal").modal("show");
         var params =
         {
             username: $('#username').val().trim(),
@@ -63,38 +72,44 @@ $(function () {
             password: $('#password').val().trim()
         };
         if (params.username == '' || params.password == '' || params.phonenum == '' || params.vercode == '') {
-            alert("请填写完整");
-            $("#loadingModal").modal("hide");
+            swal({
+                title: "请填写完整",
+                icon: "warning"
+            });
             return;
         }
         if (params.password.length < 6) {
-            alert("密码长度至少6个字符");
-            $("#loadingModal").modal("hide");
+            swal({
+                title: "密码长度至少6个字符",
+                icon: "warning"
+            });
             return;
         }
         if (params.password != $('#confirmpwd').val().trim()) {
-            alert("输入两次的密码不一致");
-            $("#loadingModal").modal("hide");
+            swal({
+                title: "输入两次的密码不一致",
+                icon: "warning"
+            });
             return;
         }
         params.password = T.common.util.md5(params.password);
         T.common.ajax.request("WeconBox", "user/signupphone", params, function (data, code, msg) {
             $("#loadingModal").modal("hide");
             if (code == 200) {
-                alert("注册成功");
+                swal({
+                    title: "注册成功",
+                    icon: "success"
+                });
                 T.common.user.setSid(data.sid);
-                location = "../../../main.html";
+                location = "../../../index.html";
             }
             else {
-                alert(msg);
+                swal({
+                    title: msg,
+                    icon: "error"
+                });
             }
         });
 
     })
 })
-/*
- * modal框显示
- * */
-showUserLicenseModal = function () {
-    $("#userLicenseModal").modal("show");
-}

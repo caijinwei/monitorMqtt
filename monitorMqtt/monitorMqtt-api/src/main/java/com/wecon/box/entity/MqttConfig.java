@@ -12,6 +12,15 @@ public class MqttConfig {
     public String serverIP;
     public int port;
     public int maxConn;
+    public int websocketPort;
+
+    public int getWebsocketPort() {
+        return websocketPort;
+    }
+
+    public void setWebsocketPort(int websocketPort) {
+        this.websocketPort = websocketPort;
+    }
 
     public boolean isSsl() {
         return isSsl;
@@ -95,6 +104,8 @@ public class MqttConfig {
                 ", isSsl=" + isSsl +
                 ", serverIP='" + serverIP + '\'' +
                 ", port=" + port +
+                ", maxConn=" + maxConn +
+                ", websocketPort=" + websocketPort +
                 '}';
     }
 }

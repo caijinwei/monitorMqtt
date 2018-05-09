@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="web/lib/font-awesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" type="text/css" href="web/lib/animate.min.css"/>
     <link rel="stylesheet" type="text/css" href="web/lib/base.css"/>
+    <link rel="stylesheet" href="web/lib/bootstrap/bootstrap-switch/css/bootstrap-switch.min.css">
     <link rel="stylesheet" type="text/css" href="web/css/style.css"/>
     <link rel="stylesheet" type="text/css" href="web/lib/jquery/context/css/context.standalone.css">
     <!--低版本浏览器识别HTML5标签--><!--低版本浏览器支持CSS媒体查询--><!--[if lt IE 9]>
@@ -78,7 +79,7 @@
 
                             <a title="添加盒子">
                                 <button class="nav-btn btn-circle btn-primary main-list" type="button"
-                                        data-toggle="modal" ng-click="getRefList()"  data-target="#addPIBox"><i class="fa fa-plus-square"></i>
+                                        data-toggle="modal" ng-click=""  data-target="#addServerConfig"><i class="fa fa-plus-square"></i>
                                 </button>
                             </a>
                             <a class="J_menuItem" href="web/html/user/viewaccountmgr.html" target="content_frame"
@@ -97,39 +98,13 @@
                 </li>
 
                 <ul class="nav leftmenu" id="side_nav" ng-cloak ng-if="type==1">
-                    <li style="margin-top:25px;">
-                        <a class="J_menuItem" href="webref/html/boxtitle2.html?device_id=-100" target="content_frame"><i
-                                class="glyphicon glyphicon-eye-open"></i><span class="nav-label">自定义监控点</span></a>
+                    <li style="margin-top:25px;" ng-repeat="x in serverList">
+                        <a class="J_menuItem" href="web/html/serverTitle.html?type=0&&server_id={{x.serverId}}" target="content_frame">
+                            <i class="glyphicon glyphicon-user"></i><span class="nav-label">&nbsp;&nbsp;{{x.serverName}}</span></a>
                     </li>
-                    <li ng-repeat="x in allDatas">
-                    <a href="#" ng-click="sideclick(x);" id="dir_a_{{x.accountdirId}}" ondrop="drop(event)"
-                       ondragover="allowDrop(event)">
-                        <i class="fa fa-folder-o"></i>
-                        <span class="nav-label" id="spanid_{{x.accountdirId}}"> {{x.accountdirName}} </span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level" id="dir_ul_{{x.accountdirId}}" sid="{{x.accountdirId}}">
-                        <li ng-repeat="y in x.deviceList">
-                            <a class="J_menuItem" id="box_{{y.deviceId}}" target="content_frame" map="{{y.deviceMap}}"
-                               href="webref/html/boxtitle.html?device_id={{y.deviceId}}&device_name={{y.deviceName}}"
-                               data_devid="{{y.deviceId}}" draggable="true" ondragstart="drag(event)"
-                               ng-click="selectbox(y.deviceId)" class="list-group-item"><i name="i_box"
-                                                                ng-class="{true:'fa fa-circle using-icon',false:'fa fa-ban unusing-icon'}[y.deviceState==1]"
-                                                                data-toggle="tooltip"
-                                                                title="{{y.deviceState==1?'在线':'离线'}}"></i>{{y.deviceName}}</a>
-                        </li>
-                    </ul>
-                </li>
 
                 </ul>
 
-                <ul class="nav leftmenu" role="tablist"
-                    id="overviewtab" ng-cloak ng-if="type==2">
-                    <li class="active" style="margin-top:25px;">
-                        <a class="J_menuItem" href="web/html/boxtitle2.html?device_id=-200" target="content_frame"><i
-                                class="glyphicon glyphicon-eye-open"></i><span class="nav-label">自定义监控点</span></a>
-                    </li>
-                </ul>
 
                 <ul class=" nav nav-pills nav-stacked" role="tablist"
                     id="hosttab" ng-cloak ng-if="type==0">
@@ -140,16 +115,7 @@
                         <a class="J_menuItem" href="web/html/log-list.html" target="content_frame"><i class="glyphicon glyphicon-tasks"></i><span class="nav-label">&nbsp;&nbsp;操作日志</span></a>
                     </li>
                     <li>
-                        <a class="J_menuItem" href="web/html/allDevice.html" target="content_frame"><i class="glyphicon glyphicon-inbox"></i><span class="nav-label">&nbsp;&nbsp;盒子列表</span></a>
-                    </li>
-                    <li>
-                        <a class="J_menuItem" href="web/html/firmware-list.html" target="content_frame"><i class="fa fa-archive"></i><span class="nav-label">&nbsp;&nbsp;固件管理</span></a>
-                    </li>
-                    <li>
-                        <a class="J_menuItem" href="web/html/driver-list.html" target="content_frame"><i class="fa fa-building"></i><span class="nav-label">&nbsp;&nbsp;驱动管理</span></a>
-                    </li>
-                    <li>
-                        <a class="J_menuItem" href="web/html/app-version-mgr.html" target="content_frame"><i class="fa fa-android"></i><span class="nav-label">&nbsp;&nbsp;APP版本管理</span></a>
+                        <a class="J_menuItem" href="web/html/allDevice.html" target="content_frame"><i class="glyphicon glyphicon-inbox"></i><span class="nav-label">&nbsp;&nbsp;mosquitto服务器列表</span></a>
                     </li>
                 </ul>
             </ul>
@@ -182,6 +148,118 @@
 </div>
 
 
+
+
+<!-- 添加服务器 modal -->
+<div class="modal inmodal fade" id="addServerConfig" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="padding:15px 10px;">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h5 class="modal-title">添加MQTT配置</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="tabs-container">
+                            <div class="tab-content">
+                                <div  class="tab-pane active">
+                                    <form method="post" class="form-horizontal">
+                                        <!--
+                                         隐藏plc_id
+                                        当plc_id为默认值0时候  就是新增用户
+                                        当plc_id为非0数值时候  就是修改改plc_id的内容
+                                         -->
+                                        <div class="form-group col-md-6">
+                                            <label class="col-sm-4 control-label">服务器别名</label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control"  type="text" id="serverNameInput"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label class="col-sm-4 control-label">服务器地址</label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control"  type="text"
+                                                       id="serverIPInput">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group col-md-6">
+                                            <label class="col-sm-4 control-label">服务器账户</label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control" id="usernameInput">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label class="col-sm-4 control-label">服务器密码</label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control" id="passwordInput">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label class="col-sm-4 control-label">TLS</label>
+
+                                            <div class="col-sm-7">
+
+                                                <input class="col-md-7" id="isSslInput" name="switch-state"
+                                                       type="checkbox" >
+
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label class="col-sm-4 control-label">端口号</label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control" id="portInput">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="col-sm-4 control-label">websocket端口号</label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control" id="websocketPortInput">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label class="col-sm-4 control-label">最大连接数</label>
+
+                                            <div class="col-sm-7">
+                                                <input class="form-control" id="maxConnInput">
+                                            </div>
+                                        </div>
+
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white closeModal" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="btn_plcInfo_submit" ng-click="addMqttConfig()">确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript" src="web/lib/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="web/lib/bootstrap/js/bootstrap.min.js"></script>
 <script src="web/lib/bootstrap/collapse/bootstrap-collapse.js"></script>
@@ -210,16 +288,6 @@
             compress: false
         });
 
-        function attachContext(selector, map) {
-            context.attach(selector, [{
-                text: "地图定位",
-                href: 'web/html/box-map-test.html?map=' + map,
-                action: function () {
-                    alert("menu for " + map);
-                }
-            }
-            ])
-        };
         $("#side_nav li :gt(1) li a").each(
                 function () {
                     var id = $(this).prop("id");

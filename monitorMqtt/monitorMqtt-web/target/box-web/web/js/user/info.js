@@ -12,7 +12,10 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
                 $scope.$apply();
             }
             else {
-                alert(msg);
+                swal({
+                    title: msg,
+                    icon: "error"
+                });
             }
         });
     }
@@ -22,11 +25,17 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
      */
     $scope.chgpwd = function () {
         if ($("#oldpwd").val().trim() == "" || $("#newpwd").val().trim() == "" || $("#newpwdconfirm").val().trim() == "") {
-            alert("请输入完整信息");
+            swal({
+                title: "请输入完整信息",
+                icon: "warning"
+            });
             return;
         }
         if ($("#newpwd").val().trim() != $("#newpwdconfirm").val().trim()) {
-            alert("两个输入的密码不一致");
+            swal({
+                title: "两个输入的密码不一致",
+                icon: "warning"
+            });
             return;
         }
         var params =
@@ -36,11 +45,17 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
         };
         T.common.ajax.request('WeconBox', "user/chgpwd", params, function (data, code, msg) {
             if (code == 200) {
-                alert("修改成功");
+                swal({
+                    title: "修改成功",
+                    icon: "success"
+                });
                 $("#updatePwd").modal("hide");
             }
             else {
-                alert(msg);
+                swal({
+                    title: msg,
+                    icon: "error"
+                });
             }
         });
     }
@@ -50,7 +65,10 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
      */
     $scope.chgemail = function () {
         if ($("#newemail").val().trim() == "") {
-            alert("请邮箱地址");
+            swal({
+                title: "请邮箱地址",
+                icon: "warning"
+            });
             return;
         }
         var params =
@@ -59,11 +77,17 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
         };
         T.common.ajax.request('WeconBox', "user/chgemail", params, function (data, code, msg) {
             if (code == 200) {
-                alert("修改成功,请到新邮箱激活");
+                swal({
+                    title: "修改成功,请到新邮箱激活",
+                    icon: "success"
+                });
                 $("#updateEmail").modal("hide");
             }
             else {
-                alert(msg);
+                swal({
+                    title: msg,
+                    icon: "error"
+                });
             }
         });
     }
@@ -93,11 +117,17 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
         var oldphone = $scope.userInfo.phonenum;
         var newphone = $("#newphone").val().trim();
         if (newphone == "") {
-            alert("请填写手机号码");
+            swal({
+                title: "请填写手机号码",
+                icon: "warning"
+            });
             return;
         }
         if (oldphone != "" && oldphone == newphone) {
-            alert("手机号码与旧号码一样,请填写新号码");
+            swal({
+                title: "手机号码与旧号码一样,请填写新号码",
+                icon: "warning"
+            });
             return;
         }
         var params =
@@ -111,7 +141,10 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
                 settime($btn);
             }
             else {
-                alert(msg);
+                swal({
+                    title: msg,
+                    icon: "error"
+                });
                 $btn.removeAttribute("disabled");
             }
         }, function () {
@@ -128,13 +161,19 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
         };
         T.common.ajax.request("WeconBox", "user/chgphonenum", params, function (data, code, msg) {
             if (code == 200) {
-                alert("修改成功");
+                swal({
+                    title: "修改成功",
+                    icon: "success"
+                });
                 $("#updatePhoneNum").modal("hide");
                 $scope.userInfo.phonenum = data.phonenum;
                 $scope.$apply();
             }
             else {
-                alert(msg);
+                swal({
+                    title: msg,
+                    icon: "error"
+                });
             }
         }, function () {
             console.log("ajax error");
@@ -151,16 +190,21 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
         };
         T.common.ajax.request("WeconBox", "user/chgcompany", params, function (data, code, msg) {
             if (code == 200) {
-                alert("修改成功");
+                swal({
+                    title: "修改成功",
+                    icon: "success"
+                });
                 $("#updateCompany").modal("hide");
                 $scope.onInit();
             }
             else {
-                alert(msg);
+                swal({
+                    title: msg,
+                    icon: "error"
+                });
             }
         }, function () {
             console.log("ajax error");
         });
     }
-
 })

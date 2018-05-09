@@ -119,7 +119,10 @@ public enum ErrorCodeOption {
 
 
     Monitor_Existed("该分组下已经存在该监控点",60001),
-	Get_Data_Error("获取参数异常",60002) ;
+	Get_Data_Error("获取参数异常",60002) ,
+    Find_Account_Servers_Error("获取用户服务器列表失败",60004),
+    UnBind_Account_Server_Error("绑定MQTT服务器失败",60005),
+    Bind_Account_Server_Error("绑定MQTT服务器失败",60003);
 
     public int value;
     public String key;

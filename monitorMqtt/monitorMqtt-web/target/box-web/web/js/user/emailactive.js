@@ -11,7 +11,10 @@ $(function () {
     T.common.ajax.request("WeconBox", "user/signupemailactive", params, function (data, code, msg) {
         if (code == 200) {
             if (params.type == 1) {
-                alert("激活成功");
+                swal({
+                    title: "激活成功",
+                    icon: "success"
+                });
                 //T.common.user.setSid(data.sid);
                 location = "login.html";
             } else {
@@ -19,7 +22,10 @@ $(function () {
             }
         }
         else {
-            alert(code + " " + msg);
+            swal({
+                title: msg,
+                icon: "error"
+            });
             $("#title").html("激活失败，请使用邮件中的激活地址");
         }
     });

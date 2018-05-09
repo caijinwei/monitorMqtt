@@ -1,205 +1,132 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MQTT Debug</title>
+    <title>MQTT JS客户端例子</title>
 
-    <link href="../lib/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/default.css" rel="stylesheet" type="text/css"/>
-    <script src="../lib/jquery/jquery-3.2.1.min.js"></script>
-    <script src="../lib/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="../lib/mqtt/bmqtt.js"></script>
+    <!-- Bootstrap -->
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
-    <style>
-        .myform {
-            margin-top: 15px;
-        }
-
-        #mqtt-log-containor {
-            height: 80%;
-            width: 100%;
-            margin-top: 15px;
-            /*background: #000;*/
-            /*color:green;*/
-        }
-
-        #mqtt-log {
-            width: 100%;
-            height: 600px;
-            overflow: auto;
-        }
-
-        #clear {
-            color: white;
-        }
-
-    </style>
-    <script>
-        var client;
-
-        $(document).ready(function () {
-
-            $("#disconnectBtn").hide();
-            $("#subscribe").hide();
-            $("#connectBtn").show();
-
-
-            $("#clear").on('click', function () {
-
-                $("#mqtt-log").empty()
-                log("Clear :)")
-            })
-
-            $('#unsubscribeBtn').on('click', function () {
-
-                var topic = $("#mqtt-topic").val();
-                if (topic < 1) {
-                    log('topic 不能为null')
-                    return
-                }
-                client.unsubscribe(topic);
-                log('>>>退订topic = ' + topic)
-            })
-
-            $('#subscribeBtn').on('click', function () {
-
-                var topic = $("#mqtt-topic").val();
-                if (topic < 1) {
-                    log('topic 不能为null')
-                    return
-                }
-                client.subscribe(topic);
-                log('>>>订阅topic = ' + topic)
-            })
-            $('#disconnectBtn').on('click', function () {
-
-                log('end.')
-                client.end();
-                $("#connectBtn").show();
-                $(this).hide();
-                $("#subscribe").hide();
-            })
-
-            $('#publishBtn').on('click', function () {
-
-                var topic = $("#mqtt-topic").val();
-                if (topic < 1) {
-                    log('topic 不能为null')
-                    return
-                }
-                var msg = $("#mqtt-msg").val();
-                if (msg < 1) {
-                    log('msg 不能为null')
-                    return
-                }
-                client.publish(topic, msg);
-                log('>>>发布消息 = ' + msg)
-            })
-
-            $('#connectBtn').on('click', function () {
-
-                var host = $("#mqtt-host").val();
-                var port = $("#mqtt-port").val();
-
-                if (host.length < 1 || port < 1) {
-                    log('host和port不能为空...')
-                    return;
-                }
-                log('开始连接...')
-
-                $(this).hide();
-                $("#disconnectBtn").show();
-                $("#subscribe").show();
-
-                client = mqtt.connect('ws://' + host + ':' + port + '', {
-                    username: $("#mqtt-username").val(),
-                    password: $("#mqtt-pwd").val()
-                });
-                client.on('connect', function () {
-
-                    log('connect :)')
-                    //client.subscribe('mytopic');
-                    //client.publish('mytopic', 'hello mqtt123');
-
-                    $(this).hide();
-                    $("#disconnectBtn").show();
-                    $("#subscribe").show();
-                });
-                client.on("error", function (error) {
-
-                    log(error.toString());
-                    $(this).show();
-                    $("#disconnectBtn").hide();
-                    $("#subscribe").hide();
-                });
-                client.on("message", function (topic, payload) {
-                    log('收到topic = ' + topic + ' 消息: ' + payload.toString());
-                    //alert([topic, payload].join(": "));
-                    //client.end();
-                });
-
-                //client.publish("mytopic", "hello world!");
-            })
-        });
-
-        function log(data) {
-            var date = new Date();
-            var t = date.toLocaleString();
-            $('#mqtt-log').prepend('<p>' + t + " " + data + '</p>');
-        }
-    </script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="../lib/mqtt/html5shiv.min.js"></script>
+    <script src="../lib/mqtt/respond.min.js"></script>
+    <![endif]-->
 </head>
-<body>
-<div class="container" style="padding: 20px">
-
-    <div class="well well-lg">MQTT Client</div>
-
-    <form class="form-inline">
-        <div class="form-group">
-            <label class="sr-only" for="mqtt-host">MQTT Host</label>
-            <input type="text" class="form-control" id="mqtt-host" placeholder="MQTT Host" value="192.168.45.186">
+<body   >
+<div class="navbar navbar-default navbar-fixed-top" role="navigation" >
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">MQTT For JS</a>
         </div>
-        <div class="form-group">
-            <label class="sr-only" for="mqtt-port">MQTT Port</label>
-            <input type="text" class="form-control" id="mqtt-port" placeholder="MQTT Port" value="9001">
-        </div>
-        <div class="form-group">
-            <label class="sr-only" for="mqtt-port">MQTT User</label>
-            <input type="text" class="form-control" id="mqtt-username" placeholder="MQTT User" value="admin">
-        </div>
-        <div class="form-group">
-            <label class="sr-only" for="mqtt-port">MQTT Pwd</label>
-            <input type="text" class="form-control" id="mqtt-pwd" placeholder="MQTT Pwd" value="password">
-        </div>
-        <button type="button" class="btn btn-primary" id="connectBtn">连接</button>
-        <button type="button" class="btn btn-danger" id="disconnectBtn">断开</button>
-
-    </form>
-
-    <div class="myform" id="subscribe">
-        <form class="form-inline">
-            <div class="form-group">
-                <label class="sr-only" for="mqtt-host">MQTT Host</label>
-                <input type="text" class="form-control" id="mqtt-topic" placeholder="MQTT Topic" value="test/messages">
-            </div>
-            <button type="button" class="btn btn-success" id="subscribeBtn">订阅</button>
-            <button type="button" class="btn btn-warning" id="unsubscribeBtn">退订</button>
-
+        <form class="navbar-form navbar-right" style="margin-right: 45px">
+            <span id="notice" style="color: #ff3a28"></span>
         </form>
-        <br>
+        <!--<form class="navbar-form navbar-right" role="search">-->
+            <!--<div class="form-group">-->
+                <!--<input id="host" type="text" class="form-control" placeholder="主机地址" value="caijinwei.win">-->
+                <!--<input id="port" type="text" class="form-control" placeholder="端口号" value="9001">-->
+                <!--<input id="userName" type="text" class="form-control" placeholder="帐户名" value="admin">-->
+                <!--<input id="password" type="text" class="form-control" placeholder="密码" value="password">-->
+                <!--<input id="ssl" type="checkbox" class="form-control">-->
+                <!--<input id="clientId" type="text" class="form-control" placeholder="客户端ID" value="mqttJS-1">-->
+            <!--</div>-->
+            <!--<button id="connectbtn" type="button" class="btn btn-default">连接</button>-->
+        <!--</form>-->
+    </div>
+</div>
 
-        <form class="form-inline">
-            <div class="form-group">
-                <label class="sr-only" for="mqtt-msg">MQTT Message</label>
-                <input type="text" class="form-control" id="mqtt-msg" placeholder="MQTT Message" value="hello mqtt">
-            </div>
-            <button type="button" class="btn btn-success" id="publishBtn">发布消息</button>
 
-        </form>
+<div class="container">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">连接</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-inline" role="form">
+                <div class="form-group">
+                    <input id="host" type="text" class="form-control" placeholder="主机地址" value="caijinwei.win">
+                    <input id="port" type="text" class="form-control" placeholder="端口号" value="9001">
+                    <input id="userName" type="text" class="form-control" placeholder="帐户名" value="admin">
+                    <input id="password" type="text" class="form-control" placeholder="密码" value="password">
+                    <span>SSL</span><input id="ssl" type="checkbox" class="form-control">
+                    <input id="clientId" type="text" class="form-control" placeholder="客户端ID">
+                </div>
+                <button id="connectbtn" type="button" class="btn btn-default">连接</button>
+            </form>
+        </div>
     </div>
 
-    <div class="panel panel-success" id="mqtt-log-containor">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">发布</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-inline" role="form">
+                <div class="form-group">
+                    <input id="pub_channel" type="text" class="form-control" placeholder="频道">
+                    <input id="pub_message" type="text" class="form-control" placeholder="内容">
+                </div>
+                <button id="pub_btn" type="button" class="btn btn-default">发布</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">订阅</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-inline" role="form">
+                <div class="form-group">
+                    <input id="sub_channel" type="text" class="form-control" placeholder="频道">
+                </div>
+                <button id="sub_btn" type="button" class="btn btn-default">订阅</button>
+                <button id="unsub_btn" type="button" class="btn btn-default">取消订阅</button>
+            </form>
+            <div>
+                <h3 id="subscriptions">
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="panel panel-default">-->
+        <!--<div class="panel-heading">-->
+            <!--<h3 class="panel-title">接收消息</h3>-->
+        <!--</div>-->
+        <!--<table class="table table-condensed table-bordered">-->
+            <!--<colgroup>-->
+                <!--<col class="col-xs-1">-->
+                <!--<col class="col-xs-1">-->
+                <!--<col class="col-xs-1">-->
+                <!--<col class="col-xs-6">-->
+                <!--<col class="col-xs-1">-->
+            <!--</colgroup>-->
+            <!--<thead>-->
+            <!--<tr>-->
+                <!--<th>时间</th>-->
+                <!--<th>频道</th>-->
+                <!--<th>发送者</th>-->
+                <!--<th>内容</th>-->
+                <!--<th>消息体大小</th>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody id="messages"/>-->
+        <!--</table>-->
+    <!--</div>-->
+    <div class="panel panel-default" id="mqtt-log-containor">
         <div class="panel-heading">
             <span class="label label-info">日志</span>
             <!--<h3 class="panel-title" style="display:inline">日志</h3>-->
@@ -209,6 +136,220 @@
         <div class="panel-body" id="mqtt-log"></div>
     </div>
 
-</div>
+
+</div><!-- /.container -->
+
+
+
+<script src="../lib/jquery/jquery.min.js"></script>
+<script src="../lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="../lib/mqtt/mqttws31.js"></script>
+<script src="../lib/wecon-common.js"></script>
+
+
+<!-- Capture events and use the library -->
+<script>
+    // UI globals
+    var connected = false;
+    var client;
+    // Connect/ disconnect
+    $("#connectbtn").click(function () {
+//        if($('#clientId').val()==="") {
+            $('#clientId').val("jsmqtt_" + Math.random());
+//        }
+
+        var host = $("#host").val();
+        var port = $("#port").val();
+        var clientId = $("#clientId").val();
+        if (!connected) {
+
+            //创建连接对象
+            client = new Paho.MQTT.Client(host, parseInt(port), clientId);
+
+            // 设置回调函数
+            client.onConnectionLost = onConnectionLost;
+            client.onMessageArrived = onMessageArrived;
+            // connect the client
+
+            console.log("($('#ssl').prop('checked'))  "+($('#ssl').prop('checked')));
+            //连接参数
+            var options = {
+                timeout: 1,
+                useSSL: ($('#ssl').prop('checked')),
+                userName: $('#userName').val(),
+                password: $('#password').val(),
+                onSuccess: onConnect,
+                onFailure: function (message) {
+                    $('#status').val("Connection failed: " + message.errorMessage + "Retrying");
+//                    setTimeout(MQTTconnect, reconnectTimeout);
+                    swal("连接失败");
+                    console.log("连接失败");
+                }
+            }
+
+            client.connect(options);
+            // Do UI stuff
+            connected = true;
+        } else {
+            // Disconnect
+            //	MQTT.disconnect()
+            // Do UI stuff
+            connected = false;
+            client.disconnect()
+            $('#notice').text("");
+            discounnectView();
+            $('.label').remove();
+        }
+        return false;
+    });
+
+    // Publish
+    $("#pub_btn").click(function() {
+        if (!client.isConnected()) {
+            console.error("MQTT client is not connected to a broker. Impossible to publish message");
+            discounnectView();
+            $('#notice').text("连接断开");
+            return false;
+        }
+        var channel = $("#pub_channel").val();
+        var pub_message = $("#pub_message").val();
+
+        if(channel === undefined || channel==="" || pub_message === undefined || pub_message ===""){
+            alert("发布参数不能为空");
+            return false;
+        }
+
+        //{"extras":{"cnt":"ttyunnjmki  bbg","cntType":"txt","msgType":"room"},"from":"866
+        //    401028575010@user","to":"ningxia@room","type":"msg"}
+
+        registNamespace("mqtt.msg.extras");
+        mqtt.msg.from = client.clientId;
+        mqtt.msg.to = channel;
+        mqtt.msg.type = "msg";
+        mqtt.msg.extras.cnt = pub_message;
+        mqtt.msg.extras.cntType = "txt";
+        mqtt.msg.extras.msgType = "room";
+
+        var jsonextras = JSON.stringify(mqtt.msg);
+        //var jsonextras = $.parseJSON(extras);
+        ///console.info(jsonextras);
+
+        message = new Paho.MQTT.Message(jsonextras);
+
+        message.destinationName = channel;
+        client.send(message);
+
+
+        return false;
+    });
+
+    // Subscribe
+    $("#sub_btn").click(function() {
+        if (!client.isConnected()) {
+            console.error("MQTT client is not connected to a broker. Impossible to subscribe to channel");
+            discounnectView();
+            $('#notice').text("连接断开");
+            return false;
+        }
+        var channel = $("#sub_channel").val();
+        //client.subscribe(channel, function (message) {
+        //	$("#messages").prepend("<tr><td>" + new Date() + "</td><td>" + channel + "</td><td>" + message + "</td></tr>");
+        //});
+        if(channel===undefined||channel===""){
+            alert("订阅主题未填！");
+            return false;
+        }
+
+        client.subscribe(channel);
+        // Do UI stuff
+        $("#subscriptions").append("<span channel='" + channel + "' class='label label-default'>" + channel + "</span> ");
+        return false;
+    });
+
+    // Unsubscribe
+    $("#unsub_btn").click(function() {
+        if (!client.isConnected()) {
+            console.error("MQTT client is not connected to a broker. Impossible to unsubscribe from channel");
+            discounnectView();
+            $('#notice').text("连接断开");
+            return false;
+        }
+        var channel = $("#sub_channel").val();
+        if(channel===undefined || channel ===""){
+            alert("取消订阅参数未填写！");
+            return;
+        }
+        client.unsubscribe(channel);
+        // Do UI stuff
+        $('.label[channel="' + channel + '"]').remove();
+        return false;
+    });
+
+
+    // called when the client connects
+    function onConnect() {
+        // Once a connection has been made, make a subscription and send a message.
+        $("#connectbtn").text("断开");
+        $("#host").prop('disabled', true);
+        $("#port").prop('disabled', true);
+        $("#ssl").prop('disabled',true);
+        $("#password").prop('disabled',true);
+        $("#userName").prop('disabled',true);
+        $("#clientId").prop('disabled', true);
+        $('#notice').text("连接成功");
+        console.log("onConnect");
+    }
+
+    // called when the client loses its connection
+    function onConnectionLost(responseObject) {
+        if (responseObject.errorCode !== 0) {
+            swal({
+                title: "该页面失去和mqtt服务器的连接？ ",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then(function (isok) {
+                if (isok) {
+                    $scope.deleteMqttConfig($scope.server_id);
+                }
+            });
+
+            console.log("onConnectionLost:" + responseObject.errorMessage);
+        }
+    }
+
+    // called when a message arrives
+    function onMessageArrived(message) {
+        console.log("onMessageArrived:" + message.payloadString);
+
+        var msg = message.payloadString;
+        var from = "";
+        try {
+            var jsonObj = $.parseJSON(message.payloadString);
+            from = jsonObj.from;
+            msg = jsonObj.extras.cnt;
+
+        } catch (e) {
+            console.info(e);
+        }
+
+        console.log(msg);
+        var date = new Date();
+        var t = date.toLocaleString();
+        $('#mqtt-log').prepend('<p>' + t + "     主题："+ message.destinationName +"      发送者："  +from+ "   消息体：" + msg +'</p>');
+
+//        $("#messages").prepend("<tr><td>" + getCurrentDate() + "</td><td>" + message.destinationName + "</td><td>"  + from + "</td><td>" + msg + "</td><td>" + message.payloadBytes.byteLength + "</td></tr>");
+    }
+
+
+    function log(data) {
+        var date = new Date();
+        var t = date.toLocaleString();
+        $('#mqtt-log').prepend('<p>' + t + " " + data + '</p>');
+    }
+
+
+</script>
+
 </body>
 </html>

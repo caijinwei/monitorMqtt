@@ -25,7 +25,14 @@ public class MqttConfigParam {
     @NotNull
     public int port;
 
+    @NotNull
+    public int websocketPort;
+
+
+
     public int maxConn = 10000;
+
+
 
     public boolean isSsl() {
         return isSsl;
@@ -99,9 +106,17 @@ public class MqttConfigParam {
         this.port = port;
     }
 
+    public int getWebsocketPort() {
+        return websocketPort;
+    }
+
+    public void setWebsocketPort(int websocketPort) {
+        this.websocketPort = websocketPort;
+    }
+
     @Override
     public String toString() {
-        return "MqttConfig{" +
+        return "MqttConfigParam{" +
                 "serverId=" + serverId +
                 ", serverName='" + serverName + '\'' +
                 ", username='" + username + '\'' +
@@ -109,6 +124,8 @@ public class MqttConfigParam {
                 ", isSsl=" + isSsl +
                 ", serverIP='" + serverIP + '\'' +
                 ", port=" + port +
+                ", websocketPort=" + websocketPort +
+                ", maxConn=" + maxConn +
                 '}';
     }
 }

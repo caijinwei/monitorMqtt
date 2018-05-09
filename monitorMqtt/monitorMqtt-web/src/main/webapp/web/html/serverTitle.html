@@ -22,7 +22,7 @@
     <![endif]-->
 <style>
 .menu-item li {
-	width: 33%;
+	width: 25%;
 }
 
 @media screen and (max-width: 300px) {
@@ -76,8 +76,17 @@
 						</div>
 						<div class="menu-item-text">报警配置</div>
 				</a></li>
+
 				<li><a class="top-menu-item" target="iframebox"
-					href="warmConfig.html?server_id={{serverid}}">
+					   href="mqttMonitor.html?server_id={{serverid}}">
+					<div>
+						<i class="fa fa-history"></i>
+					</div>
+					<div class="menu-item-text">MQTT连接信息</div>
+				</a></li>
+
+				<li><a class="top-menu-item" target="iframebox"
+					href="historydata.html?server_id={{serverid}}">
 						<div>
 							<i class="fa fa-history"></i>
 						</div>

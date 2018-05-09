@@ -67,8 +67,11 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
         var serverIP = $("#serverIP").val();
         var port = $("#port").val();
         var maxConn = $("#maxConn").val();
+        var websocketPort = $("#websocketPort").val();
 
-        if (serverId == "" || serverName == "" || password == "" || isSsl == "" || serverIP == "" || port == "" || maxConn == "") {
+        console.log(websocketPort+'------------');
+
+        if (serverId == "" || serverName == "" || password == "" || isSsl == "" || serverIP == "" || port == "" || maxConn == "" ||websocketPort =="") {
             swal({title: "参数未填写！", icon: "error"});
         } else {
             var params =
@@ -80,6 +83,7 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
                 serverIP: serverIP,
                 port: port,
                 maxConn: maxConn,
+                websocketPort:websocketPort,
                 isSsl:isSsl
             }
             T.common.ajax.request("WeconBox", "mqttConfig/updateMqttConfig", params, function (data, code, msg) {

@@ -1,339 +1,144 @@
-@charset "utf-8";
-
-/*
-login.html、
-phoneregister.html、
-mailregister.html
-*/
-.a {
-	height: 100px;
-	background-color: #eee;
-	border: 1px solid #ccc;
+.text-m-r2{
+	margin-right: 2px;
+}
+.text-m-l2{
+	margin-left: 3px;
+}
+/*后面是自己写的*/
+#myModal2 .row span,#addConfig .row span{
+	font-size:15px;
+	line-height:30px;
 }
 
-.wecon_logo {
-	width: 200px;
-	height: auto;
+#myModal2 label,#addConfig label,#addpoint .row label{
+	font-size:15px;
+	line-height:15px;
 }
 
-.icon {
-	display: inline-block;
-	top: 27px;
-	left: 6px;
-	position: relative;
-	color: #ccc;
-}
-
-.innericon {
-	display: inline-block;
-	top: 30px;
-	left: 6px;
-	position: relative;
-	color: #ccc;
-}
-
-.vercode {
-	display: inline-block;
-	position: relative;
-	color: #ccc;
-}
-
-input[type="text"], input[type="password"] {
-	padding-left: 26px;
-}
-
-input[type="submit"] {
-	margin-top: 15px;
-}
-
-#getvercode {
-	padding-left: 2px;
-}
-
-.form {
-	margin: 100px auto;
-}
-
-.form-group {
-	margin: 5px 0px;
-}
-
-.befloat {
-	float: right;
-}
-
-#divvercode {
-	margin-top: 22px;
-}
-
-#checkbox {
-	margin: 15px 0px;
-}
-
-/*
-* main.html
-*/
-.main-body {
-	height: 100%;
-}
-
-.wrap {
-	height: 100%;
-}
-
-.input-group input {
-	font-size: 12px;
+#myModal2 .col-sm-7,#myModal2 .col-sm-9{
 	padding-left: 5px;
+	padding-right: 5px;
 }
 
-.left-header {
-	height: 100px;
-	padding-top: 40px;
+#dev_firm .row span{
+	font-size: 15px;
+	font-family: "微软雅黑";
+	line-height: 34px;
+	text-shadow: 1px 1px 1px gainsboro;
+	padding-left: 30px;
+}
+#dev_firm .row button{
+	margin-bottom: 0px;
+	margin-left: 30px;
 }
 
-#logo {
-	height: 40px;
+.checkboxStyle{
+	border:none;
+	width: 15px;
+	height: 15px;
+	background: none;
 }
 
-.menu-title {
-	margin-left: 15px;
-	color: #828e9a;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	font-size: 14px;
-	font-weight: bold;
+/*当前警报样式*/
+#current-alarm .row select{
+	margin-bottom: 10px;
 }
 
-#side_nav ul {
-	display: none;
+/*添加盒子样式稍作修改*/
+#addPIBox .row{
+	margin: 0px;
+	height: 50px;
 }
 
-.btn-item {
-	font-size: 12px;
+/*历史报警样式*/
+.laydate-icon {
+    border-width: 1px;
+    border-image: initial;
 }
 
-.list-group-item {
-	margin-left: -40px;
+.laydate-icon, .laydate-icon-default, .laydate-icon-danlan, .laydate-icon-dahong, .laydate-icon-molv {
+    height: 34px;
+    padding-right: 20px;
+    min-width: 34px;
+    vertical-align: text-top;
+    background-color: rgb(255, 255, 255);
+    background-repeat: no-repeat;
+    background-position: right center;
+    outline: 0px;
+}
+.layer-date {
+    vertical-align: text-top;
+    display: inline-block;
 }
 
-.userinfo {
-	color: #000000;
+span.history-alarm-text{
+	font-size:15px;
+}
+#history-alarm input[type="text"]{
+	margin-bottom: 5px;
 }
 
-.userinfo:hover {
-	color: cornflowerblue;
+.tr-height{
+	height: 45px;
 }
 
-.glyphicon-log-out {
-	font-size: 14px;
+
+/*报警登记*/
+#addAlarmRecord input[type="radio"]{
+	width: 15px;
+	height: 15px;
+	margin-top: 3px;
 }
 
-#left {
-	border-right: 1px solid #eee;
-	/*background-color: #EFF3F6;*/
-	background-image: url("../image/bg04.jpg");
-	height: 100%;
+button.export-excel{
+	height: 34px;
+	line-height: 10px;
 }
 
-.main-btn-group {
+/*历史数据*/
+#original-data select,#original-data input{
+	margin-bottom: 15px;
+}
+span.original-data-text{
+	font-size: 15px;
+}
+@media only screen and (min-width: 1100px) {
+	#original-data .original-data-text-special{
+		margin-left: 20px;
+	}
+}
+
+/*首页*/
+button.main-list{
+	width: 34px;
+	height: 34px;
+	border:2px solod #1ab394;
+	border-radius:17px;
 	margin-top: 10px;
 }
-
-.wrap ul li a span {
-	color: #828e9a;
-	padding: 10px 0px;
-	height: 40px;
-	width: 300px;
+button.main-list i{
+	font-size:15px;
 }
 
-#side_nav {
-	list-style-type: none;
-	margin-left: -40px;
-	margin-top: 20px;
-	font-weight: bold;
+/*首页样式*/
+/*首页收缩图标*/
+.fixed-top-nav{
+	position: absolute;
+	z-index:999;
+	left: 100%;
+	margin-left: -52px;
+	padding-bottom: 0px;
 }
-
-#side_nav li ul {
-	list-style-type: none;
-}
-
-#right {
-	background-color: #fff;
-	height: 100%;
-}
-
-#right iframe {
-	width: 100%;
-	height: 100%;
-}
-
-#btn-home {
-	border-bottom-right-radius: 0;
-	border-top-right-radius: 0;
-}
-
-#btn-group-mgr {
-	border-radius: 0;
-}
-
-#btn-viewaccount {
-	border-radius: 0;
-}
-
-#btn-setting {
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
-}
-/*.glyphicon-ok{
-    color: #2889d0;
-}*/
-.container-fluid table tbody tr td a {
-	text-decoration: none;
-}
-
-.container-fluid table tbody tr td a span {
-	color: #2889d0;
-	margin: 10px;
-}
-
-/* 小屏幕（平板，大于等于768px） */
-@media ( min-width : 768px) {
-	#logo {
-		display: none;
-	}
-}
-/* 中等屏幕（桌面显示器，大于等于992px） */
-@media ( min-width : 992px) {
-	#logo {
-		display: block;
-	}
-}
-/* 大屏幕（大桌面显示器，大于等于1200px） */
-@media ( min-width : 1200px) {
-	#logo {
-		display: block;
+@media only screen and (max-width:350px ) {
+	.fixed-top-nav{
+		margin-left: 0px;
 	}
 }
 
-/*overview.html*/
-.row {
-	margin-right: 15px;
-	margin-left: 15px;
+.using-icon{
+	color: #00FF7F;
 }
-
-.state-overview {
-	margin-top: 20px;
-}
-
-.state-overview .state-panel {
-	padding: 20px 20px;
-	margin-bottom: 10px;
-	/*background-color: #EFF3F6;*/
-	background-image: url("../image/bg04.jpg");
-	border: 1px solid transparent;
-	border-radius: 4px;
-	box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
-}
-
-.state-overview .state-panel .state-line {
-	height: 30px;
-	line-height: 30px;
-	white-space: nowrap;
-}
-
-.state-overview .yellow {
-	color: #ffc601;
-}
-
-.state-overview .red {
-	color: #ff3a28;
-}
-
-.state-overview .purple {
-	color: #9b3edc;
-}
-
-.state-overview .blue {
-	color: #2889d0;
-}
-
-.blue {
-	color: #2889d0;
-}
-
-.fa-2 {
-	font-size: 2em;
-}
-
-.state-overview .state-panel .state-desc {
-	color: #737373;
-	font-size: 12px;
-}
-
-.state-overview .state-panel .state-value {
-	width: 62%;
-	display: inline-block;
-	font-size: 30px;
-	font-weight: 500;
-}
-
-/*setting.html*/
-.setting-item {
-	margin: 5px;
-	border: 1px solid transparent;
-	transition: box-shadow 0.3s;
-}
-
-.setting-item a {
-	text-decoration: none;
-}
-
-.setting-item:hover {
-	opacity: 0.8;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	background-image: url("../image/bg04.jpg");
-}
-
-.setting-item img {
-	width: 100%;
-	height: auto;
-}
-
-.desc {
-	padding: 15px;
-	text-align: center;
-}
-
-.img-div {
-	text-align: center;
-	margin-top: 15px;
-}
-
-.img-div img {
-	width: 60px;
-	height: auto;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.custom-style {
-	background-color: #337ab7;
-	padding: 10px 0px;
-	height: 40px;
-	width: 300px;
-}
-
-
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak,
-.x-ng-cloak {
-	display: none !important;
-}
-
-.onlineIcon{
-	margin-right: 10px;
-	color: #4cae4c;
-}
-.offlineIcon{
-	margin-right: 10px;
+.unusing-icon{
 	color: grey;
 }
+

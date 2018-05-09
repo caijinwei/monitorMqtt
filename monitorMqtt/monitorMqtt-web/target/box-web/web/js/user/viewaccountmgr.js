@@ -4,6 +4,8 @@
 var appModule = angular.module('weconweb', []);
 appModule.controller("listController", function ($scope, $http, $compile) {
     $scope.onInit = function () {
+        $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",});
+
         $scope.paginationConf = {
             currentPage: 1,
             itemsPerPage: 10,
@@ -30,7 +32,6 @@ appModule.controller("listController", function ($scope, $http, $compile) {
     $scope.getList = function (pageIndex, pageSize) {
         if (pageIndex == 0)
             pageIndex = 1;
-        $("#loadingModal").modal("show");
         var params = {
             pageIndex: pageIndex,
             pageSize: pageSize
@@ -41,15 +42,15 @@ appModule.controller("listController", function ($scope, $http, $compile) {
                 $scope.pushlist = data.page.list;
                 $scope.$apply();
                 $scope.createSwitchState();
-                $("#loadingModal").modal("hide");
             }
             else {
-                alert(code + " " + msg);
-                $("#loadingModal").modal("hide");
+                swal({
+                    title: code + " " + msg,
+                    icon: "error"
+                });
             }
         }, function () {
             console.log("ajax error");
-            $("#loadingModal").modal("hide");
         });
     }
 
@@ -74,7 +75,10 @@ appModule.controller("listController", function ($scope, $http, $compile) {
                         //$scope.getList($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
                     }
                     else {
-                        alert(msg);
+                        swal({
+                            title: msg,
+                            icon: "error"
+                        });
                     }
                 }, function () {
                     console.log("ajax error");
@@ -96,7 +100,10 @@ appModule.controller("listController", function ($scope, $http, $compile) {
      */
     $scope.addviewuser = function () {
         if ($("#username").val().trim() == "" || $("#password").val().trim() == "") {
-            alert("请输入帐号和密码");
+            swal({
+                title: "请输入帐号和密码",
+                icon: "warning"
+            });
             return;
         }
         var params = {
@@ -104,7 +111,10 @@ appModule.controller("listController", function ($scope, $http, $compile) {
             password: $("#password").val().trim()
         };
         if (params.password.length < 6) {
-            alert("密码长度至少6个字符");
+            swal({
+                title: "密码长度至少6个字符",
+                icon: "warning"
+            });
             return;
         }
         params.password = T.common.util.md5(params.password);
@@ -115,12 +125,18 @@ appModule.controller("listController", function ($scope, $http, $compile) {
         }
         T.common.ajax.request("WeconBox", "user/addviewuser", params, function (data, code, msg) {
             $("#addViewAccount").modal("hide");
-            alert('添加成功');
+            swal({
+                title: "添加成功",
+                icon: "success"
+            });
             if (code == 200) {
                 $scope.getList($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
             }
             else {
-                alert(msg);
+                swal({
+                    title: msg,
+                    icon: "error"
+                });
             }
         }, function () {
             console.log("ajax error");
@@ -150,7 +166,10 @@ appModule.controller("listController", function ($scope, $http, $compile) {
                         $scope.getList($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
                     }
                     else {
-                        alert(msg);
+                        swal({
+                            title: msg,
+                            icon: "error"
+                        });
                     }
                 }, function () {
                     console.log("ajax error");
@@ -190,10 +209,16 @@ appModule.controller("listController", function ($scope, $http, $compile) {
             if (code == 200) {
                 $scope.getList($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
                 $("#newWinModal").modal("hide");
-                alert("设置成功");
+                swal({
+                    title: "设置成功",
+                    icon: "success"
+                });
             }
             else {
-                alert(msg);
+                swal({
+                    title: msg,
+                    icon: "error"
+                });
                 $("#loadingModal").modal("hide");
             }
         }, function () {

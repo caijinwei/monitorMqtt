@@ -31,6 +31,7 @@ public class UserInfoAction extends UserBaseAction {
         JSONObject data = new JSONObject();
         data.put("username", AppContext.getSession().client.account);
         data.put("type", AppContext.getSession().client.userInfo.getUserType());
+        data.put("accountId",AppContext.getSession().client.userInfo.getUserID());
         return new Output(data);
     }
 

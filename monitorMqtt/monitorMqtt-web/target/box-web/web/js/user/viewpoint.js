@@ -62,7 +62,7 @@ appModule.controller("listController", function ($scope, $http, $compile) {
                 $scope.$apply();
             }
             else {
-                alert(code + "-" + msg);
+                swal(code+ '-' + msg,"","error");
             }
         }, function () {
             console.log("ajax error");
@@ -89,7 +89,7 @@ appModule.controller("listController", function ($scope, $http, $compile) {
                 chk_value.push($(this).val());
                 var tem = "right_" + $(this).val();
                 var right = $("#myiframe").contents().find("input[name=" + tem + "]:checked").val();
-                if (right != ""&&right!=undefined) {
+                if (right != "" && right != undefined) {
                     rightOption.push(right);
                 }
 
@@ -98,25 +98,25 @@ appModule.controller("listController", function ($scope, $http, $compile) {
         var ids = chk_value.join(",");
         var rights = rightOption.join(",");
         if (chk_value.length == 0) {
-            alert("没有添加任何监控点");
+            swal("没有添加任何监控点");
             $("#showRestOpint").modal("hide");
             return;
         }
-        $("#btn_setViewOpint").attr("disabled","true");
-        $("#btn_cancelSetOption").attr("disabled","true");
+        $("#btn_setViewOpint").attr("disabled", "true");
+        $("#btn_cancelSetOption").attr("disabled", "true");
         var params = {viewId: viewid.toString(), selectedId: ids, rights: rights};
         T.common.ajax.request("WeconBox", "Viewpoint/setViewPoint", params, function (data, code, msg) {
             if (code == 200) {
                 $("#showRestOpint").modal("hide");
                 $("#btn_setViewOpint").removeAttr("disabled");
                 $("#btn_cancelSetOption").removeAttr("disabled");
-                alert("添加成功");
+                swal("添加成功","","success");
                 var type = T.common.util.getParameter("type").toString();
                 $scope.showAlreadPoint(type.toString(), viewid.toString());
                 //$scope.getRestList( $scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
             }
             else {
-                alert(code + "-" + msg);
+                swal(code+ '-' + msg,"","error");
             }
         }, function () {
             console.log("ajax error");
@@ -126,30 +126,45 @@ appModule.controller("listController", function ($scope, $http, $compile) {
     /*
      * 操作视图账号实时历史监控点解除绑定
      * */
-
+    //
+    //$scope.deleteOpintParam = function (pointId, roleType) {
+    //    $scope.pointIdParam = pointId;
+    //    $scope.roleTypeParam = roleType.toString();
+    //}
     $scope.deleteOpintParam = function (pointId, roleType) {
-        $scope.pointIdParam = pointId;
-        $scope.roleTypeParam = roleType.toString();
+        roleType = roleType.toString();
+        swal({
+            title: " 确定解除关联！",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then(function (isok) {
+            if (isok) {
+                $scope.deleteOption(pointId, roleType);
+            }
+        });
     }
-    $scope.deleteOption = function () {
+
+
+    $scope.deleteOption = function (pointId, roleType) {
         var viewid = T.common.util.getParameter("viewid");
         var params =
         {
-            roleType: $scope.roleTypeParam,
-            pointId: $scope.pointIdParam,
+            roleType: roleType,
+            pointId: pointId,
             viewId: viewid
         }
-        $("#btn_deleteOption").attr("disabled","true");
+        $("#btn_deleteOption").attr("disabled", "true");
         T.common.ajax.request("WeconBox", "Viewpoint/deletePoint", params, function (data, code, msg) {
             if (code == 200) {
                 var type = T.common.util.getParameter("type");
                 $("#delectOpint").modal("hide");
                 $("#btn_deleteOption").removeAttr("disabled");
-                alert("解除关联操作成功！");
+                swal("解除关联操作成功！","","success");
                 $scope.showAlreadPoint(type, viewid);
             }
             else {
-                alert(code + "-" + msg);
+                swal(code+ '-' + msg,"","error");
             }
         }, function () {
             console.log("ajax error");
@@ -167,21 +182,24 @@ appModule.controller("listController", function ($scope, $http, $compile) {
         var viewId = T.common.util.getParameter("viewid");
         var type = T.common.util.getParameter("type");
         if (viewId == null) {
-            alert("登录失效，请从新登录");
-        }
-        var params =
-        {
-            viewId: viewId,
-            pointId: $scope.viewPointRoleTypeParam,
-            roleType: roleType
-        }
-        T.common.ajax.request("WeconBox", "Viewpoint/updateViewPointRoleType", params, function (data, code, msg) {
-            if (code == 200) {
-                alert("修改监控点权限成功！");
-                $("#updateRoleSyle").modal("hide");
-                $scope.showAlreadPoint(type, viewId);
+            swal("登录失效，请从新登录", "", "warning");
+        } else if (roleType == undefined) {
+            swal("未勾选权限!", "", "warning");
+        } else {
+            var params =
+            {
+                viewId: viewId,
+                pointId: $scope.viewPointRoleTypeParam,
+                roleType: roleType
             }
-        });
+            T.common.ajax.request("WeconBox", "Viewpoint/updateViewPointRoleType", params, function (data, code, msg) {
+                if (code == 200) {
+                    swal("修改监控点权限成功!", "", "success");
+                    $("#updateRoleSyle").modal("hide");
+                    $scope.showAlreadPoint(type, viewId);
+                }
+            });
+        }
     }
     /*
      * 展示剩余监控点设置iframe的url属性

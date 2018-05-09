@@ -51,16 +51,16 @@ appModule.controller("listController", function ($scope, $http, $compile) {
             $("#showRestOpint").modal("hide");
             return;
         }
-        $("#btn_setViewOpint").attr("disabled","true");
-        $("#btn_cancelSetOption").attr("disabled","true");
-        var params = {viewId: viewid,selectedId: ids,cfg_type:"2"};
+        $("#btn_setViewOpint").attr("disabled", "true");
+        $("#btn_cancelSetOption").attr("disabled", "true");
+        var params = {viewId: viewid, selectedId: ids, cfg_type: "2"};
         T.common.ajax.request("WeconBox", "Viewpoint/setViewHisAlarmPoint", params, function (data, code, msg) {
             if (code == 200) {
                 $("#showRestOpint").modal("hide");
                 $("#btn_setViewOpint").removeAttr("disabled");
                 $("#btn_cancelSetOption").removeAttr("disabled");
                 alert("添加成功");
-                $scope.showViewAlarmpoint(viewid, "1",$scope.paginationConf.pagesLength);
+                $scope.showViewAlarmpoint(viewid, "1", $scope.paginationConf.pagesLength);
             }
             else {
                 alert(code + "-" + msg);
@@ -78,6 +78,16 @@ appModule.controller("listController", function ($scope, $http, $compile) {
     $scope.deleteOpintParam = function (pointId, roleType) {
         $scope.pointIdParam = pointId;
         $scope.roleTypeParam = roleType;
+        swal({
+            title: " 确定解除关联！",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then(function (isok) {
+            if (isok) {
+                $scope.deleteOption(pointId, roleType);
+            }
+        });
     }
     $scope.deleteOption = function () {
         var viewid = T.common.util.getParameter("viewid");
@@ -87,7 +97,7 @@ appModule.controller("listController", function ($scope, $http, $compile) {
             pointId: $scope.pointIdParam,
             viewId: viewid
         }
-        $("#btn_deleteOption").attr("disabled","true");
+        $("#btn_deleteOption").attr("disabled", "true");
         T.common.ajax.request("WeconBox", "Viewpoint/deletePoint", params, function (data, code, msg) {
             if (code == 200) {
                 var type = T.common.util.getParameter("type");
@@ -115,9 +125,8 @@ appModule.controller("listController", function ($scope, $http, $compile) {
      * @RequestParam("view_id") Integer viewId ,@RequestParam("pageIndex") Integer pageIndex, @RequestParam("pageSize") Integer pageSize)
      * */
     $scope.showViewAlarmpoint = function (viewId, pageIndex, pageSize) {
-        if(pageIndex==0)
-        {
-            pageIndex=="1";
+        if (pageIndex == 0) {
+            pageIndex == "1";
         }
         var params =
         {

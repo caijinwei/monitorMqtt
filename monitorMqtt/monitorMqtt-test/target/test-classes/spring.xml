@@ -52,24 +52,24 @@
     </bean>
 
     <!-- 数据源定义 -->
-    <bean id="ds-master" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="${datasource.master.url}" />
-        <property name="username" value="${datasource.master.user}" />
-        <property name="password" value="${datasource.master.passwd}" />
-    </bean>
-    <bean id="ds-slave1" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="${datasource.slave.url}" />
-        <property name="username" value="${datasource.slave.user}" />
-        <property name="password" value="${datasource.slave.passwd}" />
-    </bean>
+    <!--<bean id="ds-master" class="org.apache.commons.dbcp.BasicDataSource">-->
+        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
+        <!--<property name="url" value="${datasource.master.url}" />-->
+        <!--<property name="username" value="${datasource.master.user}" />-->
+        <!--<property name="password" value="${datasource.master.passwd}" />-->
+    <!--</bean>-->
+    <!--<bean id="ds-slave1" class="org.apache.commons.dbcp.BasicDataSource">-->
+        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
+        <!--<property name="url" value="${datasource.slave.url}" />-->
+        <!--<property name="username" value="${datasource.slave.user}" />-->
+        <!--<property name="password" value="${datasource.slave.passwd}" />-->
+    <!--</bean>-->
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="${datasource.master.url}"/>
-        <property name="username" value="${datasource.master.user}"/>
-        <property name="password" value="${datasource.master.passwd}"/>
+        <property name="url" value="jdbc:mysql://caijinwei.win:3306/wecon_pibox_db?useUnicode=true&characterEncoding=utf-8&autoReconnect=true"/>
+        <property name="username" value="root"/>
+        <property name="password" value="admin123"/>
     </bean>
 
     <!-- jdbc注入 -->

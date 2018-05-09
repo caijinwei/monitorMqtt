@@ -7,20 +7,20 @@ appModule
 				"listController",
 				function($scope, $http, $compile) {
 					$scope.onInit = function() {
-						$scope.showBoxInfo();
+						$scope.showServerInfo();
 					}
 
 					/*
 					 * 展示盒子的当前报警条目、当前报警盒子数、在线盒子数、总盒子数
 					 */
-					$scope.showBoxInfo = function() {
+					$scope.showServerInfo = function() {
 						var params = {
 							};
 
 						T.common.ajax
 								.request(
 										"WeconBox",
-										"alarmDataAction/boxInfo",
+										"mqttConfig/boxInfo",
 										params,
 										function(data, code, msg) {
 											if (code == 200) {

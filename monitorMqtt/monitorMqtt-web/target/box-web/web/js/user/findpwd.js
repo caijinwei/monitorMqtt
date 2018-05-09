@@ -33,7 +33,10 @@ $(function () {
                 phonenum: $('#account').val().trim()
             };
             if (params.phonenum == '') {
-                alert("请输入手机号码");
+                swal({
+                    title: "请输入手机号码",
+                    icon: "warning"
+                });
                 return;
             }
             $btn.setAttribute("disabled", true);
@@ -41,12 +44,14 @@ $(function () {
                 if (code == 200) {
                     if (data.account != null) {
                         T.common.ajax.request("WeconBox", "user/sendvercode", params, function (data, code, msg) {
-                            $("#loadingModal").modal("hide");
                             if (code == 200) {
                                 settime($btn);
                             }
                             else {
-                                alert(msg);
+                                swal({
+                                    title: msg,
+                                    icon: "success"
+                                });
                                 $btn.removeAttribute("disabled");
                             }
                         }, function () {
@@ -54,12 +59,18 @@ $(function () {
                             $btn.removeAttribute("disabled");
                         });
                     } else {
-                        alert("帐号不存在");
+                        swal({
+                            title: "帐号不存在",
+                            icon: "warning"
+                        });
                         $btn.removeAttribute("disabled");
                     }
                 }
                 else {
-                    alert(msg);
+                    swal({
+                        title: msg,
+                        icon: "error"
+                    });
                     $btn.removeAttribute("disabled");
                 }
             }, function () {
@@ -67,7 +78,10 @@ $(function () {
                 $btn.removeAttribute("disabled");
             });
         } else {
-            alert("请输入正确的邮箱或者手机号码");
+            swal({
+                title: "请输入正确的邮箱或者手机号码",
+                icon: "error"
+            });
         }
     })
 
@@ -79,26 +93,40 @@ $(function () {
             newpwd: $('#password').val().trim()
         };
         if (params.account == '' || params.vercode == '' || params.oldpwd == '' || params.newpwd == '') {
-            alert("请填写完整");
+            swal({
+                title: "请填写完整",
+                icon: "warning"
+            });
             return;
         }
         if (params.newpwd.length < 6) {
-            alert("密码长度至少6个字符");
+            swal({
+                title: "密码长度至少6个字符",
+                icon: "warning"
+            });
             return;
         }
         if (params.newpwd != $('#confirmpwd').val().trim()) {
-            alert("输入两次的密码不一致");
+            swal({
+                title: "输入两次的密码不一致",
+                icon: "warning"
+            });
             return;
         }
         params.newpwd = T.common.util.md5(params.newpwd);
 
         T.common.ajax.request("WeconBox", "user/findpwd", params, function (data, code, msg) {
-            $("#loadingModal").modal("hide");
             if (code == 200) {
-                alert("密码修改成功");
+                swal({
+                    title: "密码修改成功",
+                    icon: "success"
+                });
             }
             else {
-                alert(msg);
+                swal({
+                    title: msg,
+                    icon: "error"
+                });
             }
         });
 

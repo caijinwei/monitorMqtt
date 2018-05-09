@@ -3,6 +3,7 @@
  */
 var appModule = angular.module('weconweb', []);
 appModule.controller("infoController", function ($scope, $http, $compile) {
+    var connect_chart;
     $scope.onInit = function () {
         $('#loader-wrapper').css("display", "block");
         $scope.server_id = T.common.util.getParameter("server_id");
@@ -26,7 +27,11 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
                          * mqtt连接代码
                          * */
                         connectMqtt(data.mqttConfig);
+                        connect_chart = echarts.init($("#connectMqtt")[0]);
+                        connect_chart.setOption(option_connect);
                         $scope.$apply();
+
+
                     } else {
                         swal(code + " " + msg);
                         console.log("error失败");
@@ -49,13 +54,10 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
     var connected = false;
     var client;
     var connectMqtt = function (mqttConfig) {
-        console.log("获取得到的mqttConfig是:--->" + mqttConfig);
-        console.log("获取得到的mqttConfig.host是:--->" + mqttConfig.serverIP);
         var host = mqttConfig.serverIP;
-        var port = 9001;
+        var port = mqttConfig.websocketPort;
         var clientId = "jsmqtt_" + Math.random();
 
-        console.log("获取得到的mqttClient---"+clientId);
         //创建连接对象
         client = new Paho.MQTT.Client(host, parseInt(port), clientId);
 
@@ -166,7 +168,6 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
                     connectMqtt(pageMqttConfig);
                 }
             });
-
             console.log("onConnectionLost:" + responseObject.errorMessage);
         }
     }
@@ -178,11 +179,11 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
     function onMessageArrived(message) {
         var date = new Date();
         var t = date.toLocaleString();
-        var topic= message.destinationName
+        var topic = message.destinationName
         var msg = message.payloadString;
         console.log(t + "     主题：" + message.destinationName + "   消息体：" + msg);
 
-        setAllData(topic,msg);
+        setAllData(topic, msg);
         //try {
         //    var jsonObj = $.parseJSON(message.payloadString);
         //    from = jsonObj.from;
@@ -245,116 +246,94 @@ appModule.controller("infoController", function ($scope, $http, $compile) {
     }
 
 
-})
-
-
-/*
- * 折线图实现
- * */
-var queue = new Queue();
-for(var i=0 ;i<14;i++){
-    queue.enqueue(0);
-}
-console.log("获取得到queue的值是   ",queue.getItems());
-
-var config = {
-    type: 'line',
-    data: {
-        labels: ['60s', '', '', '', '', '', '', '', '', '', '', '', '', '', '0'],
-        datasets: [{
-            label: '',
-            backgroundColor: window.chartColors.red,
-            borderColor: window.chartColors.red,
-            data: queue.getItems(),
-            fill: false,
-        }]
-    },
-    options: {
-        responsive: true,
-        title: {
-            display: true,
-            text: 'mqtt实时连接数'
-        },
-        tooltips: {
-            mode: 'index',
-            intersect: false,
-        },
-        hover: {
-            mode: 'nearest',
-            intersect: false
-        },
-        scales: {
-            xAxes: [{
-                display: true,
-                scaleLabel: {
-                    display: false,
-                }
-            }],
-            yAxes: [{
-                display: true,
-                scaleLabel: {
-                    display: true,
-                    labelString: '连接数'
-                }
-            }]
-        }
-    }
-};
-
-window.onload = function () {
-    var ctx = document.getElementById('canvas').getContext('2d');
-    window.myLine = new Chart(ctx, config);
     /*
-     * 线性图实时获取数据
+     * 折线图实现
      * */
+    var queue = new Queue();
+    for (var i = 0; i < 15; i++) {
+        queue.enqueue(0);
+    }
+
+    var option_connect = {
+        title: {
+            text: 'mqtt实时在线数'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['13s', '', '', '', '', '', '', '', '', '', '', '', '0']
+        },
+        yAxis: {
+            type: 'value',
+            min: 0,
+            max: function (value) {
+                if (value < 5) {
+                    return 5;
+                } else {
+                    return value.min + 5;
+                }
+            }
+        },
+        series: [{
+            data: queue.getItems(),
+            type: 'line'
+        }]
+    };
+
+    window.onload = function () {
+
+        /*
+         * 线性图实时获取数据
+         * */
 
         var setData = function () {
-            console.log("有执行到这里么");
-            queue.print();
-            config.data.datasets.forEach(function (dataset) {
-                dataset.data = queue.getItems();
-            });
-            window.myLine.update();
+            console.log("获取到的query的数组   "+queue.toString());
+            queue.enqueue($("#connectedId").text());
+            var currentOption = connect_chart.getOption();
+            currentOption.series[0].data = queue.getItems();
+            connect_chart.setOption(currentOption);
         }
         setInterval(setData, 1000);
 
-};
+    };
 
 
-var colorNames = Object.keys(window.chartColors);
+    function Queue() {
+        var items = [];
 
+        this.size = function () {
+            return items.length;
+        }
+        this.clear = function () {
+            items = [];
+        }
+        this.getItems = function () {
+            return items;
+        }
+        /*
+         * 设置固定长度的队列
+         * */
 
-function Queue() {
-    var items = [];
-
-    this.size = function () {
-        return items.length;
-    }
-    this.clear = function () {
-        items = [];
-    }
-    this.getItems = function () {
-        return items;
-    }
-    /*
-     * 设置固定长度的队列
-     * */
-
-    this.dequeue = function () {
-        items.shift();
-    }
-
-    this.enqueue = function (element) {
-        items.push(element);
-        while (items.length >= 14) {
+        this.dequeue = function () {
             items.shift();
+        }
+
+        this.enqueue = function (element) {
+            items.push(element);
+            while (items.length >= 14) {
+                items.shift();
+            }
+        }
+
+        this.print = function () {
+            console.log(items.toString());
         }
     }
 
-    this.print = function () {
-        console.log(items.toString());
-    }
-}
 
-
+})
 

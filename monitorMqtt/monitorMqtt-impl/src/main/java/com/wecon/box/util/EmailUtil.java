@@ -11,11 +11,11 @@ import java.util.Properties;
  */
 public class EmailUtil {
 
-    public static final String HOST = "smtp.exmail.qq.com";
+    public static final String HOST = "smtp.163.com";
     public static final String PROTOCOL = "smtp";
     public static final int PORT = 25;
-    public static final String FROM = "piapp@we-con.com.cn";//发件人的email
-    public static final String PWD = "Weconhmi123";//发件人密码
+    public static final String FROM = "cai_caijinwei@163.com";//发件人的email
+    public static final String PWD = "qq123456789";//发件人密码
 
     /**
      * 获取Session
@@ -69,7 +69,7 @@ public class EmailUtil {
     }
 
     public static void main(String[] args) {
-        send("86779961@qq.com", "test email", "这个是一封测试<br>邮件");
+        send("429829114@qq.com", "test email", "这个是一封测试<br>邮件");
         System.out.println("send complete");
     }
 }

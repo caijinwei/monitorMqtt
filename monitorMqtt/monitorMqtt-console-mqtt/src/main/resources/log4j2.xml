@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" monitorInterval="180">
+    <Appenders>
+        <Console name="console" target="SYSTEM_ERR">
+            <PatternLayout pattern="%c %p %d{yyy-MM-dd HH:mm:ss} Message: %m %n"/>
+        </Console>
+        <!--<Alarm name="alarm" level="error" defaultAlarmSource="m2a" timeout="5000" maxCacheSize="300">
+&lt;!&ndash;            <AlarmServer host="52.76.238.191" port="9010" />
+            <AlarmServer host="52.76.238.198" port="9010" />&ndash;&gt;
+            <AlarmServer host="10.79.184.134" port="9010"/>
+            <AlarmServer host="10.79.185.196" port="9010"/>
+            <ClientPool maxIdle="1" minIdle="0" maxTotal="3"/>
+        </Alarm>-->
+
+        <RollingFile name="RollingFile" fileName="D:/monitor/monitorMqtt/logs/server.log"
+                     filePattern="logs/$${date:yyyy-MM}/server-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <SizeBasedTriggeringPolicy size="10MB"/>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

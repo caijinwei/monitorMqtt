@@ -1,83 +1,79 @@
 <!DOCTYPE html>
-<html lang="en" id="overview-html" ng-app="weconweb">
+<html lang="en" ng-app="weconweb">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--<script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>-->
-    <link rel="stylesheet" type="text/css" href="../css/style.css" />
-    <link rel="stylesheet" href="../lib/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../lib/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="stylesheet" type="text/css" href="../lib/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/animate.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../lib/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <!--低版本浏览器识别HTML5标签-->
+    <!--低版本浏览器支持CSS媒体查询-->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="../lib/html5shiv/html5shiv-printshiv.min.js"></script>
+    <script type="text/javascript" src="../lib/respond/respond.min.js"></script>
+    <![endif]-->
 </head>
-<body   ng-controller="listController" ng-init="onInit()" id="overview-body" >
-    <div class="container-fluid">
-        <div class="row state-overview">
-            <div class="col-md-3">
-                <div class="state-panel">
-                    <div class="state-line">
-                        <div class="state-value red ng-binding">{{boxInfo.nowalarm}}</div>
-                    </div>
-                    <div class="state-symbol">
-                        <i class="user alarm-num fa-2 red"></i>
-                    </div>
-                    <div class="state-line">
-                        <div class="state-desc ng-binding">当前报警条目</div>
-                    </div>
+<body class="gray-bg" ng-controller="listController" ng-init="onInit()">
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <i class="pull-left fa fa-forward"></i>
+                    <h5>当前报警条目</h5>
+                </div>
+                <div class="ibox-content" style="height: 70px;">
+                    <h1 class="no-margins color-red" ng-bind="boxInfo.nowalarm"></h1>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="state-panel">
-                    <div class="state-line">
-                        <div class="state-value yellow ng-binding">{{boxInfo.alarmbox}}</div>
-                    </div>
-                    <div class="state-symbol">
-                        <i class="user alarm-box-num fa-2 yellow"></i>
-                    </div>
-                    <div class="state-line">
-                        <div class="state-desc ng-binding">当前报警盒子数</div>
-                    </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <i class="pull-left fa fa-forward"></i>
+                    <h5>当前报警盒子数</h5>
+                </div>
+                <div class="ibox-content" style="height: 70px;">
+                    <h1 class="no-margins color-orange" ng-bind="boxInfo.alarmbox"></h1>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="state-panel">
-                    <div class="state-line">
-                        <div class="state-value purple ng-binding">{{boxInfo.onlinebox}}</div>
-                    </div>
-                    <div class="state-symbol">
-                        <i class="user online-box-num fa-2 purple"></i>
-                    </div>
-                    <div class="state-line">
-                        <div class="state-desc ng-binding">在线盒子数</div>
-                    </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <i class="pull-left fa fa-forward"></i>
+                    <h5>在线盒子数</h5>
+                </div>
+                <div class="ibox-content" style="height: 70px;">
+                    <h1 class="no-margins  color-darkViolet" ng-bind="boxInfo.onlinebox"></h1>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="state-panel">
-                    <div class="state-line">
-                        <div class="state-value blue ng-binding">{{boxInfo.allbox}}</div>
-                    </div>
-                    <div class="state-symbol">
-                        <i class="user total-box-num fa-2 blue"></i>
-                    </div>
-                    <div class="state-line">
-                        <div class="state-desc ng-binding">总盒子数</div>
-                    </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <i class="pull-left fa fa-forward"></i>
+                    <h5>总盒子数</h5>
+                </div>
+                <div class="ibox-content" style="height: 70px;">
+                    <h1 class="no-margins  color-darkTurquoise" ng-bind="boxInfo.allbox"></h1>
                 </div>
             </div>
         </div>
     </div>
-    <script src="../lib/jquery/jquery-3.2.1.min.js"></script>
-	<script src="../lib/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script src="../lib/bootstrap/collapse/bootstrap-collapse.js"></script>
-	<script src="../lib/angular/angular.min.js" type="text/javascript"></script>
-	<script src="../lib/wecon-common.js" type="text/javascript"></script>
-	<script src="../js/overview.js" type="text/javascript"></script>
 
-    <!--<footer>-->
-        <!--<div class="pull-right">-->
-            <!--<a href="http://www.we-con.com.cn/zh/" target="_blank" title="维控科技" style="text-decoration: none">维控科技</a>-->
-            <!--<span style="color:#5A738E;">服务热线：0591-87868869；技术热线：0591-87868869转860/861/862；邮箱：sales@we-con.com.cn</span>-->
-        <!--</div>-->
-    <!--</footer>-->
+</div>
+<script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="../lib/angular/angular.min.js" type="text/javascript"></script>
+<script src="../lib/wecon-common.js" type="text/javascript"></script>
+<script src="../js/overview.js" type="text/javascript"></script>
+<script>
+
+</script>
 </body>
 </html>

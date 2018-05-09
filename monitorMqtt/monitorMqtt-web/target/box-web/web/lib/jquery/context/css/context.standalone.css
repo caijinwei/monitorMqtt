@@ -103,7 +103,7 @@
 	background-color: transparent;
 }
 .open {
-	*z-index: 1000;
+	*z-index: 9999;
 }
 .open > .dropdown-menu {
 	display: block;

@@ -24,9 +24,8 @@
         <processorPath useClasspath="true" />
         <module name="box-context" />
         <module name="box-web" />
+        <module name="monitorMqtt-console-mqtt" />
         <module name="monitorMqtt-context" />
-        <module name="monitorMqtt-test" />
-        <module name="monitorMqtt-web" />
       </profile>
       <profile default="false" name="Annotation profile for box-api" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -68,6 +67,13 @@
         <processorPath useClasspath="true" />
         <module name="monitorMqtt-impl" />
       </profile>
+      <profile default="false" name="Annotation profile for monitorMqtt-web" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="monitorMqtt-web" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="box" target="1.5" />
@@ -80,12 +86,13 @@
       <module name="box-impl" target="1.7" />
       <module name="box-test" target="1.5" />
       <module name="box-web" target="1.5" />
-      <module name="monitorMqtt" target="1.5" />
+      <module name="monitorMqtt" target="1.8" />
       <module name="monitorMqtt-api" target="1.6" />
+      <module name="monitorMqtt-console-mqtt" target="1.5" />
       <module name="monitorMqtt-context" target="1.5" />
       <module name="monitorMqtt-impl" target="1.7" />
       <module name="monitorMqtt-test" target="1.5" />
-      <module name="monitorMqtt-web" target="1.5" />
+      <module name="monitorMqtt-web" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

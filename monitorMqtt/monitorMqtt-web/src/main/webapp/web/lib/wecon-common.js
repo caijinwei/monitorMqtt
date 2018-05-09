@@ -49,12 +49,12 @@
                         if (code == 200) {
                             if (data.auth == "1") {
                                 if (location.href.indexOf("/user/") > 0) {
-                                    location = "../../../main.html";
+                                    location = "/monitor-web/web/index.html";
                                     return;
                                 }
                             } else {
                                 if (location.href.indexOf("/user/") == -1) {
-                                    location = "web/html/user/login.html";
+                                    location = "/monitor-web/web/html/user/login.html";
                                     return;
                                 }
                             }
@@ -150,14 +150,14 @@
                                 // session超时
                                 else if (code == 403) {
                                     console.log("403 session过期,请重新登录");
-                                    if (location.href.indexOf("main.html") > 0) {
-                                        location = "web/html/user/login.html";
+                                    if (location.href.indexOf("index.html") > 0) {
+                                        location = "/monitor-web/web/html/user/login.html";
                                         return;
                                     } else {
-                                        if (location.href.indexOf("box-web") > 0) {
-                                            top.location = "/box-web/web/html/user/login.html";
+                                        if (location.href.indexOf("monitor-web") > 0) {
+                                            top.location = "/monitor-web/web/html/user/login.html";
                                         } else {
-                                            top.location = "/web/html/user/login.html";
+                                            top.location = "/monitor-web/web/html/user/login.html";
                                         }
                                         return;
                                     }

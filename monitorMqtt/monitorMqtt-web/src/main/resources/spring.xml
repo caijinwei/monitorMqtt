@@ -170,20 +170,9 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-    <!-- 环境配置 -->
-    <beans profile="product">
-        <context:property-placeholder location="classpath*:spring-product.properties"/>
-    </beans>
-    <!-- 内测 -->
-    <beans profile="server">
-        <context:property-placeholder location="classpath*:spring-server.properties"/>
-    </beans>
-    <!-- 外测 -->
-    <beans profile="test">
-        <context:property-placeholder location="classpath*:spring-test.properties"/>
-    </beans>
+
     <!-- 本地 -->
-    <beans profile="dev">
-        <context:property-placeholder location="classpath*:spring-dev.properties"/>
+    <beans>
+        <context:property-placeholder location="classpath*:spring-test.properties"/>
     </beans>
 </beans>

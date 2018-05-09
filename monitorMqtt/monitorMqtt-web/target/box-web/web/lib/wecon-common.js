@@ -11,12 +11,12 @@
             // 请求地址
             requestUrl: {
                 //Usercenter: "http://${apphost}/usercenter-web/api/",
-                WeconBox: "http://localhost:8080/box-web/api/",
+                WeconBox: "http://localhost:8080/monitor-web/api/",
                 //WeconBox: "http://192.168.29.186:8686/box-web/api/",
                 //WeconBox: "http://49.4.4.75/box-web/api/",
                 //WeconBoxWs: "ws://localhost:8080/box-web/api/",
                 //WeconBoxWs: "ws://192.168.29.186:8686/box-web/api/",
-                WeconBoxWs: "ws://localhost:8080/box-web/api/",
+                WeconBoxWs: "ws://localhost:8080/monitor-web/api/",
             },
             api: {
                 getRequestUrl: function (urlName) {
@@ -49,12 +49,12 @@
                         if (code == 200) {
                             if (data.auth == "1") {
                                 if (location.href.indexOf("/user/") > 0) {
-                                    location = "../../../main.html";
+                                    location = "../../../index.html";
                                     return;
                                 }
                             } else {
                                 if (location.href.indexOf("/user/") == -1) {
-                                    location = "web/html/user/login.html";
+                                    location = "../../../web/html/user/login.html";
                                     return;
                                 }
                             }
@@ -150,12 +150,12 @@
                                 // session超时
                                 else if (code == 403) {
                                     console.log("403 session过期,请重新登录");
-                                    if (location.href.indexOf("main.html") > 0) {
+                                    if (location.href.indexOf("index.html") > 0) {
                                         location = "web/html/user/login.html";
                                         return;
                                     } else {
                                         if (location.href.indexOf("box-web") > 0) {
-                                            top.location = "/box-web/web/html/user/login.html";
+                                            top.location = "/monitor-web/web/html/user/login.html";
                                         } else {
                                             top.location = "/web/html/user/login.html";
                                         }
