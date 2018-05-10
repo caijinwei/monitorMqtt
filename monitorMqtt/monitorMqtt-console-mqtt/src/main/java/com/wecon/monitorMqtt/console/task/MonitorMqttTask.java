@@ -144,8 +144,6 @@ public class MonitorMqttTask extends AbstractTask {
         abstractTask.setType(1);
 
 
-
-
         List<Notification> list1 = new ArrayList<Notification>();
             MonitorMqttTask mqttTask = new MonitorMqttTask(mqttConfig,list);
             mqttTask.run();
